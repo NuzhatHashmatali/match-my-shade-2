@@ -143,27 +143,6 @@ function getSkinDepthLabel(l: number): { label: string; description: string } {
   return { label: "Deep", description: "The sample leans deeper in overall depth." };
 }
 
-function getBrightnessLabel(quality: { underexposed: boolean; overexposed: boolean }): { label: string; description: string } {
-  if (quality.overexposed) {
-    return { label: "High", description: "The image appears brighter than ideal for reliable matching." };
-  }
-  if (quality.underexposed) {
-    return { label: "Low", description: "The image appears dimmer than ideal for reliable matching." };
-  }
-  return { label: "Balanced", description: "The image brightness looks balanced for matching." };
-}
-
-function getImageQualityScore(quality: any, confidence: number): number {
-  let score = 100;
-  if (quality.blur === "poor") score -= 18;
-  if (quality.exposure === "poor") score -= 18;
-  if (quality.noise === "poor") score -= 12;
-  if (quality.whiteBalance === "poor") score -= 8;
-  if (quality.lighting === "poor") score -= 10;
-  score = Math.max(40, Math.min(100, score));
-  return Math.round(score * 0.8 + confidence * 0.2);
-}
-
 function buildAssistantPayload(imageAnalysis: any, matches: any[], detectedHex: string) {
   console.log("[match] Assistant payload started");
   try {
@@ -171,8 +150,6 @@ function buildAssistantPayload(imageAnalysis: any, matches: any[], detectedHex: 
     const [l] = rgbToLab(r, g, b);
     const undertone = getUndertoneLabel(r, g, b);
     const depth = getSkinDepthLabel(l);
-    const brightness = getBrightnessLabel(imageAnalysis.quality);
-    const qualityScore = getImageQualityScore(imageAnalysis.quality, imageAnalysis.confidence);
 
     const recommendations = [] as any[];
     if (matches.length > 0) {
@@ -203,13 +180,7 @@ function buildAssistantPayload(imageAnalysis: any, matches: any[], detectedHex: 
       });
     }
 
-    const explanation = `Your skin appears ${depth.label.toLowerCase()} with a ${undertone.label.toLowerCase()} undertone. Based on facial skin analysis and CIELAB color matching, this recommendation is the closest match.`;
-    const qualityTips = imageAnalysis.poorQuality ? [
-      "Use brighter, diffused natural light.",
-      "Keep the face or swatch fully in frame and avoid strong shadows.",
-      "Hold the camera steady and avoid blurry motion.",
-      "Make sure the image is not overexposed or underexposed."
-    ] : [];
+    const explanation = `Your skin appears ${depth.label.toLowerCase()} with a ${undertone.label.toLowerCase()} undertone. Based on CIELAB color matching, these are the closest foundation matches.`;
 
     const payload = {
       detectedSkinTone: {
@@ -219,13 +190,9 @@ function buildAssistantPayload(imageAnalysis: any, matches: any[], detectedHex: 
       },
       detectedUndertone: undertone,
       skinDepth: depth,
-      brightnessLevel: brightness,
-      imageQualityScore: qualityScore,
       matchConfidence: Math.round(imageAnalysis.confidence),
       explanation,
-      recommendations,
-      qualityTips,
-      qualityIssue: imageAnalysis.poorQuality ? "The current image quality is not strong enough for reliable matching." : null
+      recommendations
     };
     console.log("[match] Assistant payload finished");
     return payload;
@@ -325,7 +292,7 @@ async function analyzeImageWithGemini(buffer: Buffer, mimeType: string) {
       model: "gemini-2.5-flash",
       contents: [
         {
-          text: "Analyze this image for beauty-tech shade matching. Return strict JSON with: targetType ('face' or 'swatch'), quality {lighting:'good'|'poor', blur:'good'|'poor', exposure:'good'|'poor', underexposed:boolean, overexposed:boolean, noise:'good'|'poor', whiteBalance:'good'|'poor'}, faceBox {x,y,width,height} or null, skinRegions {leftCheek,rightCheek,forehead} each as {x,y,width,height} or null, swatchBox {x,y,width,height} or null, estimatedHex string, confidence number. No markdown."
+          text: "Analyze this image for beauty-tech shade matching. Return strict JSON with: targetType ('face' or 'swatch'), faceBox {x,y,width,height} or null, skinRegions {leftCheek,rightCheek,forehead} each as {x,y,width,height} or null, swatchBox {x,y,width,height} or null, estimatedHex string, confidence number. No markdown."
         },
         {
           inlineData: {
@@ -412,74 +379,8 @@ async function analyzeImageBuffer(buffer: Buffer, mimeType: string) {
   }
 
   const brightnessMean = grayscaleValues.reduce((sum, v) => sum + v, 0) / grayscaleValues.length / 255;
-  const brightnessVariance = grayscaleValues.reduce((sum, value) => sum + Math.pow(value / 255 - brightnessMean, 2), 0) / grayscaleValues.length;
   const totalPixels = grayscaleValues.length;
-  const highlightPixels = grayscaleValues.filter((value) => value / 255 > 0.9).length / totalPixels;
-  const shadowPixels = grayscaleValues.filter((value) => value / 255 < 0.2).length / totalPixels;
-  const channelMeans = rgbSamples.reduce((acc, [r, g, b]) => {
-    acc[0] += r;
-    acc[1] += g;
-    acc[2] += b;
-    return acc;
-  }, [0, 0, 0]);
-  const avgR = channelMeans[0] / totalPixels / 255;
-  const avgG = channelMeans[1] / totalPixels / 255;
-  const avgB = channelMeans[2] / totalPixels / 255;
-  const whiteBalancePoor = Math.max(Math.abs(avgR - avgG), Math.abs(avgB - avgG)) > 0.12;
-
-  let blurPoor = false;
-  let noisePoor = false;
-  let exposureIssue = "good";
-  let lightingIssue = "good";
-
-  const laplacian = [] as number[];
-  for (let y = 1; y < height - 1; y += 1) {
-    for (let x = 1; x < width - 1; x += 1) {
-      const index = y * width + x;
-      const center = grayscaleValues[index] / 255;
-      const left = grayscaleValues[index - 1] / 255;
-      const right = grayscaleValues[index + 1] / 255;
-      const up = grayscaleValues[index - width] / 255;
-      const down = grayscaleValues[index + width] / 255;
-      laplacian.push(Math.abs((left + right + up + down - 4 * center)));
-    }
-  }
-  const blurScore = laplacian.reduce((s, v) => s + v, 0) / Math.max(1, laplacian.length);
-  blurPoor = blurScore < 0.035;
-
-  const localVariance = [] as number[];
-  for (let index = 0; index < count; index += 1) {
-    const current = grayscaleValues[index] / 255;
-    const neighbors = [index - 1, index + 1, index - width, index + width].filter((candidate) => candidate >= 0 && candidate < count);
-    const neighborMean = neighbors.reduce((sum, candidate) => sum + grayscaleValues[candidate] / 255, 0) / Math.max(1, neighbors.length);
-    localVariance.push(Math.abs(current - neighborMean));
-  }
-  const noiseScore = localVariance.reduce((sum, value) => sum + value, 0) / localVariance.length;
-  noisePoor = noiseScore > 0.08;
-
-  if (brightnessMean > 0.82 || highlightPixels > 0.2) {
-    exposureIssue = "poor";
-    lightingIssue = "poor";
-  } else if (brightnessMean < 0.22 || shadowPixels > 0.25) {
-    exposureIssue = "poor";
-    lightingIssue = "poor";
-  } else if (brightnessVariance < 0.005) {
-    lightingIssue = "poor";
-  }
-
   console.log(`[match] Lighting correction started in ${Date.now() - startedAt}ms`);
-  const quality = {
-    lighting: lightingIssue,
-    blur: blurPoor ? "poor" : "good",
-    exposure: exposureIssue,
-    underexposed: brightnessMean < 0.22,
-    overexposed: brightnessMean > 0.82 || highlightPixels > 0.2,
-    noise: noisePoor ? "poor" : "good",
-    whiteBalance: whiteBalancePoor ? "poor" : "good"
-  };
-
-  const poorQuality = quality.lighting === "poor" || quality.blur === "poor" || quality.exposure === "poor" || quality.noise === "poor" || quality.whiteBalance === "poor";
-  console.log(`[match] Lighting correction finished in ${Date.now() - startedAt}ms`, { quality, poorQuality });
 
   let targetType = geminiResult?.targetType || (sourceWidth > 0 && sourceHeight > 0 && sourceWidth / sourceHeight > 1.35 ? "swatch" : "face");
   if (geminiResult?.targetType === "swatch" || (sourceWidth > 0 && sourceHeight > 0 && sourceWidth / sourceHeight > 1.4)) {
@@ -591,13 +492,12 @@ async function analyzeImageBuffer(buffer: Buffer, mimeType: string) {
 
   const [r, g, b] = selected;
   const hex = rgbToHex(r, g, b);
+  const confidence = clamp(Math.round(82 + (basePixels.length > 0 ? 8 : 0) + (targetType === "swatch" ? 3 : 0)), 60, 97);
   console.log(`[match] Undertone detection finished in ${Date.now() - startedAt}ms`, { hex });
   return {
     hex,
     targetType,
-    quality,
-    poorQuality,
-    confidence: clamp(Math.round(100 - (poorQuality ? 35 : 8) - (quality.blur === "poor" ? 10 : 0) - (quality.exposure === "poor" ? 12 : 0)), 40, 97),
+    confidence,
     faceBox,
     skinRegions,
     width: sourceWidth,
@@ -646,14 +546,7 @@ async function startServer() {
           console.log(`[match] Image analysis finished in ${Date.now() - startedAt}ms`);
 
           if (!imageAnalysis?.hex) {
-            return sendJsonError(res, 422, "We could not read a usable skin tone from this image. Please upload a better image.");
-          }
-
-          if (imageAnalysis.poorQuality) {
-            return sendJsonError(res, 422, "The image quality is too poor for a reliable match. Please upload a clearer, well-lit photo.", {
-              quality: imageAnalysis.quality,
-              suggestions: ["Use bright natural light", "Avoid shadows and glare", "Keep the camera steady", "Make sure the face or swatch is clearly visible"]
-            });
+            return sendJsonError(res, 422, "Couldn't detect a foundation shade. Please upload another image.");
           }
 
           const [tr, tg, tb] = hexToRgb(imageAnalysis.hex);
@@ -696,7 +589,6 @@ async function startServer() {
           return res.json({
             matches: topMatches,
             confidence: imageAnalysis.confidence,
-            quality: imageAnalysis.quality,
             targetType: imageAnalysis.targetType,
             detectedHex: imageAnalysis.hex,
             assistant

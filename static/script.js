@@ -459,13 +459,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Setup beautiful rotating beauty status messages
     const beautyStatuses = [
-      { percentage: 0, title: "Scanning Facial Pixels", subtitle: "Analyzing image color space and skin surface depth..." },
-      { percentage: 14, title: "Isolating Skin Tones", subtitle: "Detecting face bounding box and adjusting light glare..." },
-      { percentage: 28, title: "Analyzing Shade Undertones", subtitle: "Extracting subtle warm, cool, and neutral pigmentation values..." },
-      { percentage: 45, title: "Filtering Environmental Lighting", subtitle: "Normalizing white balance to direct studio-accurate lux..." },
-      { percentage: 62, title: "Calibrating Custom Formulas", subtitle: "Cross-matching color values with luxury shade databases..." },
-      { percentage: 78, title: "Ranking Formula Matches", subtitle: "Sorting by perfect-match index and price tier preferences..." },
-      { percentage: 91, title: "Refining Luxury Palette", subtitle: "Finalizing optimal brand alignments and swatch mappings..." }
+      { percentage: 0, title: "Scanning your image", subtitle: "Reading the portrait and extracting skin tone details..." },
+      { percentage: 20, title: "Finding your tone", subtitle: "Comparing the detected color with foundation shades..." },
+      { percentage: 45, title: "Matching shades", subtitle: "Ranking the closest foundation options..." },
+      { percentage: 75, title: "Preparing results", subtitle: "Finalizing the best matches for you..." },
+      { percentage: 100, title: "Done", subtitle: "Your results are ready." }
     ];
 
     // Initialize progress variables
@@ -618,12 +616,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const tone = assistantData.detectedSkinTone?.label || "Balanced tone";
     const undertone = assistantData.detectedUndertone?.label || "Neutral";
     const depth = assistantData.skinDepth?.label || "Medium";
-    const brightness = assistantData.brightnessLevel?.label || "Balanced";
-    const qualityScore = assistantData.imageQualityScore ?? 0;
     const confidence = assistantData.matchConfidence ?? 0;
     const explanation = assistantData.explanation || "Your image was analyzed to guide the best foundation recommendation.";
-    const qualityIssue = assistantData.qualityIssue || "";
-    const qualityTips = (assistantData.qualityTips || []).slice(0, 4);
     const recommendations = assistantData.recommendations || [];
 
     const recMarkup = recommendations.map((item) => {
@@ -635,36 +629,25 @@ document.addEventListener("DOMContentLoaded", () => {
       return `<li><strong>${item.title}</strong><span>${shadeText}</span></li>`;
     }).join("");
 
-    const qualityMarkup = qualityTips.length > 0
-      ? qualityTips.map((tip) => `<li>${tip}</li>`).join("")
-      : `<li>Image quality looks strong enough for a reliable match.</li>`;
-
     assistantInsights.innerHTML = `
       <div class="assistant-card">
         <div class="assistant-card-header">
           <div>
-            <span class="assistant-pill">AI Beauty Assistant</span>
+            <span class="assistant-pill">Match insights</span>
             <h3>Why this match was selected</h3>
           </div>
-          <div class="assistant-score">${qualityScore}% clarity</div>
         </div>
         <p class="assistant-summary">${explanation}</p>
         <div class="assistant-grid">
           <div class="assistant-stat"><span>Estimated tone</span><strong>${tone}</strong></div>
           <div class="assistant-stat"><span>Undertone</span><strong>${undertone}</strong></div>
           <div class="assistant-stat"><span>Depth</span><strong>${depth}</strong></div>
-          <div class="assistant-stat"><span>Brightness</span><strong>${brightness}</strong></div>
           <div class="assistant-stat"><span>Match confidence</span><strong>${confidence}%</strong></div>
         </div>
-        ${qualityIssue ? `<div class="assistant-alert">${qualityIssue}</div>` : ""}
         <div class="assistant-recommendations">
           <div class="assistant-subsection">
             <h4>Recommended paths</h4>
             <ul>${recMarkup}</ul>
-          </div>
-          <div class="assistant-subsection">
-            <h4>Image guidance</h4>
-            <ul>${qualityMarkup}</ul>
           </div>
         </div>
       </div>
