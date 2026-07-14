@@ -165,70 +165,86 @@ function getImageQualityScore(quality: any, confidence: number): number {
 }
 
 function buildAssistantPayload(imageAnalysis: any, matches: any[], detectedHex: string) {
-  const [r, g, b] = hexToRgb(detectedHex);
-  const [l] = rgbToLab(r, g, b);
-  const undertone = getUndertoneLabel(r, g, b);
-  const depth = getSkinDepthLabel(l);
-  const brightness = getBrightnessLabel(imageAnalysis.quality);
-  const qualityScore = getImageQualityScore(imageAnalysis.quality, imageAnalysis.confidence);
+  console.log("[match] Assistant payload started");
+  try {
+    const [r, g, b] = hexToRgb(detectedHex);
+    const [l] = rgbToLab(r, g, b);
+    const undertone = getUndertoneLabel(r, g, b);
+    const depth = getSkinDepthLabel(l);
+    const brightness = getBrightnessLabel(imageAnalysis.quality);
+    const qualityScore = getImageQualityScore(imageAnalysis.quality, imageAnalysis.confidence);
 
-  const recommendations = [] as any[];
-  if (matches.length > 0) {
-    const sortedByPrice = [...matches].sort((a, b) => (a.price || 0) - (b.price || 0));
-    const sortedByPremium = [...matches].sort((a, b) => (b.price || 0) - (a.price || 0));
-    const sortedByAccuracy = [...matches].sort((a, b) => (b.accuracy || 0) - (a.accuracy || 0));
-    const otherBrands = sortedByAccuracy.filter((match) => match.brand !== sortedByAccuracy[0]?.brand).slice(0, 4);
+    const recommendations = [] as any[];
+    if (matches.length > 0) {
+      const sortedByPrice = [...matches].sort((a, b) => (a.price || 0) - (b.price || 0));
+      const sortedByPremium = [...matches].sort((a, b) => (b.price || 0) - (a.price || 0));
+      const sortedByAccuracy = [...matches].sort((a, b) => (b.accuracy || 0) - (a.accuracy || 0));
+      const otherBrands = sortedByAccuracy.filter((match) => match.brand !== sortedByAccuracy[0]?.brand).slice(0, 4);
 
-    recommendations.push({
-      type: "bestOverall",
-      title: "Best Overall Match",
-      shade: sortedByAccuracy[0]
-    });
-    recommendations.push({
-      type: "budgetAlternative",
-      title: "Budget Alternative",
-      shade: sortedByPrice[0]
-    });
-    recommendations.push({
-      type: "premiumAlternative",
-      title: "Premium Alternative",
-      shade: sortedByPremium[0]
-    });
-    recommendations.push({
-      type: "similarShades",
-      title: "Similar Shades from Other Brands",
-      shades: otherBrands
-    });
+      recommendations.push({
+        type: "bestOverall",
+        title: "Best Overall Match",
+        shade: sortedByAccuracy[0]
+      });
+      recommendations.push({
+        type: "budgetAlternative",
+        title: "Budget Alternative",
+        shade: sortedByPrice[0]
+      });
+      recommendations.push({
+        type: "premiumAlternative",
+        title: "Premium Alternative",
+        shade: sortedByPremium[0]
+      });
+      recommendations.push({
+        type: "similarShades",
+        title: "Similar Shades from Other Brands",
+        shades: otherBrands
+      });
+    }
+
+    const explanation = `Your skin appears ${depth.label.toLowerCase()} with a ${undertone.label.toLowerCase()} undertone. Based on facial skin analysis and CIELAB color matching, this recommendation is the closest match.`;
+    const qualityTips = imageAnalysis.poorQuality ? [
+      "Use brighter, diffused natural light.",
+      "Keep the face or swatch fully in frame and avoid strong shadows.",
+      "Hold the camera steady and avoid blurry motion.",
+      "Make sure the image is not overexposed or underexposed."
+    ] : [];
+
+    const payload = {
+      detectedSkinTone: {
+        label: `${depth.label} ${undertone.label}`,
+        hex: detectedHex,
+        description: `A ${depth.label.toLowerCase()} depth estimate with a ${undertone.label.toLowerCase()} cast.`
+      },
+      detectedUndertone: undertone,
+      skinDepth: depth,
+      brightnessLevel: brightness,
+      imageQualityScore: qualityScore,
+      matchConfidence: Math.round(imageAnalysis.confidence),
+      explanation,
+      recommendations,
+      qualityTips,
+      qualityIssue: imageAnalysis.poorQuality ? "The current image quality is not strong enough for reliable matching." : null
+    };
+    console.log("[match] Assistant payload finished");
+    return payload;
+  } catch (err) {
+    console.error("[match] Assistant payload failed", err instanceof Error ? err.stack : err);
+    throw err;
   }
-
-  const explanation = `Your skin appears ${depth.label.toLowerCase()} with a ${undertone.label.toLowerCase()} undertone. Based on facial skin analysis and CIELAB color matching, this recommendation is the closest match.`;
-  const qualityTips = imageAnalysis.poorQuality ? [
-    "Use brighter, diffused natural light.",
-    "Keep the face or swatch fully in frame and avoid strong shadows.",
-    "Hold the camera steady and avoid blurry motion.",
-    "Make sure the image is not overexposed or underexposed."
-  ] : [];
-
-  return {
-    detectedSkinTone: {
-      label: `${depth.label} ${undertone.label}`,
-      hex: detectedHex,
-      description: `A ${depth.label.toLowerCase()} depth estimate with a ${undertone.label.toLowerCase()} cast.`
-    },
-    detectedUndertone: undertone,
-    skinDepth: depth,
-    brightnessLevel: brightness,
-    imageQualityScore: qualityScore,
-    matchConfidence: Math.round(imageAnalysis.confidence),
-    explanation,
-    recommendations,
-    qualityTips,
-    qualityIssue: imageAnalysis.poorQuality ? "The current image quality is not strong enough for reliable matching." : null
-  };
 }
 
 function clamp(v: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, v));
+}
+
+function sendJsonError(res: any, status: number, message: string, details?: unknown) {
+  if (res.headersSent) return null;
+  return res.status(status).json({
+    error: message,
+    ...(details ? { details } : {})
+  });
 }
 
 function cieDe2000(labA: [number, number, number], labB: [number, number, number]): number {
@@ -610,80 +626,97 @@ async function startServer() {
     const startedAt = Date.now();
     try {
       if (!req.file) {
-        return res.status(400).json({ error: "No image file uploaded." });
+        return sendJsonError(res, 400, "No image file uploaded.");
       }
 
       if (!req.file.mimetype?.startsWith("image/")) {
-        return res.status(400).json({ error: "Please upload a valid image file." });
+        return sendJsonError(res, 400, "Please upload a valid image file.");
       }
 
       const processingPromise = (async () => {
         console.log(`[match] Foundation matching started in ${Date.now() - startedAt}ms`);
         const file = req.file;
         if (!file) {
-          return res.status(400).json({ error: "No image file uploaded." });
-        }
-        const imageAnalysis = await analyzeImageBuffer(file.buffer, file.mimetype);
-        if (!imageAnalysis?.hex) {
-          return res.status(422).json({ error: "We could not read a usable skin tone from this image. Please upload a better image." });
+          return sendJsonError(res, 400, "No image file uploaded.");
         }
 
-        if (imageAnalysis.poorQuality) {
-          return res.status(422).json({
-            error: "The image quality is too poor for a reliable match. Please upload a clearer, well-lit photo.",
-            message: "Please upload a clearer, better-lit image so we can match your shade accurately.",
+        try {
+          console.log(`[match] Image analysis started in ${Date.now() - startedAt}ms`);
+          const imageAnalysis = await analyzeImageBuffer(file.buffer, file.mimetype);
+          console.log(`[match] Image analysis finished in ${Date.now() - startedAt}ms`);
+
+          if (!imageAnalysis?.hex) {
+            return sendJsonError(res, 422, "We could not read a usable skin tone from this image. Please upload a better image.");
+          }
+
+          if (imageAnalysis.poorQuality) {
+            return sendJsonError(res, 422, "The image quality is too poor for a reliable match. Please upload a clearer, well-lit photo.", {
+              quality: imageAnalysis.quality,
+              suggestions: ["Use bright natural light", "Avoid shadows and glare", "Keep the camera steady", "Make sure the face or swatch is clearly visible"]
+            });
+          }
+
+          const [tr, tg, tb] = hexToRgb(imageAnalysis.hex);
+          const [tL, tA, tB] = rgbToLab(tr, tg, tb);
+          console.log(`[match] Matching candidates started in ${Date.now() - startedAt}ms`);
+          const matches = enrichedShades.map((shade) => {
+            try {
+              const [sL, sA, sB] = shade.lab;
+              const distance = cieDe2000([tL, tA, tB], [sL, sA, sB]);
+              const accuracyVal = Math.max(0, Math.min(100, Math.round(100 - distance * 2.4)));
+              const confidence = Math.max(0, Math.min(100, Math.round((accuracyVal * 0.85) + (imageAnalysis.confidence * 0.15))));
+              return {
+                brand: shade.brand,
+                name: shade.name,
+                hex: shade.hex,
+                accuracy: accuracyVal,
+                confidence,
+                price: shade.price,
+                date_added: shade.date_added,
+                product: shade.product,
+                shade: shade.shade,
+                spf: shade.spf,
+                coverage: shade.coverage,
+                finish: shade.finish,
+                undertone: shade.undertone,
+                skin_type: shade.skin_type
+              };
+            } catch (matchErr) {
+              console.error("[match] Candidate mapping failed", matchErr instanceof Error ? matchErr.stack : matchErr);
+              throw matchErr;
+            }
+          });
+          console.log(`[match] Matching candidates finished in ${Date.now() - startedAt}ms`, { count: matches.length });
+
+          const topMatches = matches.sort((a, b) => b.accuracy - a.accuracy).slice(0, 5);
+          console.log(`[match] Foundation matching finished in ${Date.now() - startedAt}ms`, { count: topMatches.length });
+          const assistant = buildAssistantPayload(imageAnalysis, topMatches, imageAnalysis.hex);
+          console.log(`[match] AI recommendation completed in ${Date.now() - startedAt}ms`);
+          console.log(`[match] Preparing response in ${Date.now() - startedAt}ms`);
+          return res.json({
+            matches: topMatches,
+            confidence: imageAnalysis.confidence,
             quality: imageAnalysis.quality,
-            suggestions: ["Use bright natural light", "Avoid shadows and glare", "Keep the camera steady", "Make sure the face or swatch is clearly visible"]
+            targetType: imageAnalysis.targetType,
+            detectedHex: imageAnalysis.hex,
+            assistant
+          });
+        } catch (stageErr) {
+          console.error("[match] Match pipeline failed", stageErr instanceof Error ? stageErr.stack : stageErr);
+          return sendJsonError(res, 500, "The match request failed while processing your image.", {
+            stage: "backend-processing",
+            message: stageErr instanceof Error ? stageErr.message : String(stageErr)
           });
         }
-
-        const [tr, tg, tb] = hexToRgb(imageAnalysis.hex);
-        const [tL, tA, tB] = rgbToLab(tr, tg, tb);
-        const matches = enrichedShades.map((shade) => {
-          const [sL, sA, sB] = shade.lab;
-          const distance = cieDe2000([tL, tA, tB], [sL, sA, sB]);
-          const accuracyVal = Math.max(0, Math.min(100, Math.round(100 - distance * 2.4)));
-          const confidence = Math.max(0, Math.min(100, Math.round((accuracyVal * 0.85) + (imageAnalysis.confidence * 0.15))));
-          return {
-            brand: shade.brand,
-            name: shade.name,
-            hex: shade.hex,
-            accuracy: accuracyVal,
-            confidence,
-            price: shade.price,
-            date_added: shade.date_added,
-            product: shade.product,
-            shade: shade.shade,
-            spf: shade.spf,
-            coverage: shade.coverage,
-            finish: shade.finish,
-            undertone: shade.undertone,
-            skin_type: shade.skin_type
-          };
-        });
-
-        const topMatches = matches.sort((a, b) => b.accuracy - a.accuracy).slice(0, 5);
-        console.log(`[match] Foundation matching finished in ${Date.now() - startedAt}ms`, { count: topMatches.length });
-        const assistant = buildAssistantPayload(imageAnalysis, topMatches, imageAnalysis.hex);
-        console.log(`[match] AI recommendation completed in ${Date.now() - startedAt}ms`);
-        console.log(`[match] Preparing response in ${Date.now() - startedAt}ms`);
-        res.json({
-          matches: topMatches,
-          confidence: imageAnalysis.confidence,
-          quality: imageAnalysis.quality,
-          targetType: imageAnalysis.targetType,
-          detectedHex: imageAnalysis.hex,
-          assistant
-        });
-        console.log(`[match] Response sent in ${Date.now() - startedAt}ms`);
       })();
 
       await withTimeout(processingPromise, 12000, "match processing");
     } catch (err) {
-      console.error(`[match] Matching failed after ${Date.now() - startedAt}ms`, err);
+      console.error(`[match] Matching failed after ${Date.now() - startedAt}ms`, err instanceof Error ? err.stack : err);
       if (!res.headersSent) {
-        res.status(504).json({ error: "The match request timed out. Please try again with a smaller image or a stronger connection." });
+        return sendJsonError(res, 504, "The match request timed out. Please try again with a smaller image or a stronger connection.");
       }
+      return null;
     }
   });
 
