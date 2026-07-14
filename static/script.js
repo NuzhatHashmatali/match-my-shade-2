@@ -473,6 +473,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let fetchCompleted = false;
     let matchData = null;
     let fetchError = null;
+    let requestSettled = false;
 
     // Reset loader UI to starting values
     loadingPercentage.innerText = "0%";
@@ -480,12 +481,34 @@ document.addEventListener("DOMContentLoaded", () => {
     loadingTitle.innerText = beautyStatuses[0].title;
     loadingSubtitle.innerText = beautyStatuses[0].subtitle;
 
+    function finalizeRequest() {
+      if (requestSettled) return;
+      requestSettled = true;
+      fetchCompleted = true;
+      clearInterval(progressInterval);
+      currentProgress = 100;
+      loadingPercentage.innerText = "100%";
+      loadingBarFill.style.width = "100%";
+
+      if (fetchError) {
+        handleMatchFailure(fetchError);
+      } else if (matchData) {
+        currentResults = matchData.matches || [];
+        currentAssistantData = matchData.assistant || null;
+        updateResultsView();
+
+        loadingSection.classList.add("hidden");
+        resultsSection.classList.remove("hidden");
+        resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        handleMatchFailure(new Error("No match data was returned by the server."));
+      }
+    }
+
     const progressInterval = setInterval(() => {
       if (fetchCompleted && !fetchError) {
-        // Accelerate quickly to 100% once fetch completes
         currentProgress += Math.max(3, Math.floor((100 - currentProgress) / 4));
       } else {
-        // Standard smooth non-linear progress animation
         if (currentProgress < 30) {
           currentProgress += Math.random() * 1.8 + 0.8;
         } else if (currentProgress < 60) {
@@ -497,35 +520,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // Keep holding at 98% until fetch finishes
       if (currentProgress >= 100) {
         currentProgress = 100;
-        clearInterval(progressInterval);
-
-        setTimeout(() => {
-          if (fetchError) {
-            handleMatchFailure(fetchError);
-          } else if (matchData) {
-            currentResults = matchData.matches || [];
-            currentAssistantData = matchData.assistant || null;
-            updateResultsView();
-            
-            // Clean transition to results
-            loadingSection.classList.add("hidden");
-            resultsSection.classList.remove("hidden");
-            resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-        }, 400);
+        finalizeRequest();
+        return;
       } else if (currentProgress > 98 && !fetchCompleted) {
         currentProgress = 98;
       }
 
-      // Render percentage and fill width
       const roundedProgress = Math.floor(currentProgress);
       loadingPercentage.innerText = `${roundedProgress}%`;
       loadingBarFill.style.width = `${roundedProgress}%`;
 
-      // Find and update active beauty-related status message
       let activeStatus = beautyStatuses[0];
       for (const status of beautyStatuses) {
         if (roundedProgress >= status.percentage) {
@@ -540,16 +546,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 35);
 
     function handleMatchFailure(err) {
-      console.error("Matching error:", err);
-      try {
-        alert(`Error: ${err.message || "Something went wrong while matching your shades."}`);
-      } catch (alertErr) {
-        console.error("Alert blocked by sandbox:", alertErr);
-      }
-      loadingSection.classList.add("hidden");
+      const message = err?.message || "Something went wrong while matching your shades.";
+      console.error("[frontend] matching error", err);
+      loadingTitle.innerText = "We couldn't complete the match";
+      loadingSubtitle.innerText = message;
+      loadingPercentage.innerText = "0%";
+      loadingBarFill.style.width = "0%";
+      loadingSection.classList.remove("hidden");
+      resultsSection.classList.add("hidden");
     }
 
     try {
+      console.log("[frontend] upload started");
       const formData = new FormData();
 
       if (capturedBlob) {
@@ -560,29 +568,40 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error("No image selected. Please upload or take a live photo.");
       }
 
-      // Initiate parallel fetch
+      console.log("[frontend] request sent");
       fetch("/match", {
         method: "POST",
         body: formData
       })
       .then(async (res) => {
+        console.log("[frontend] response received", { status: res.status });
         if (!res.ok) {
-          throw new Error(`Server returned error status: ${res.status}`);
+          let payload = null;
+          try {
+            payload = await res.json();
+          } catch (parseErr) {
+            console.warn("[frontend] could not parse error payload", parseErr);
+          }
+          const message = payload?.error || payload?.message || `Server returned error status: ${res.status}`;
+          throw new Error(message);
         }
-        return res.json();
-      })
-      .then((data) => {
+        const data = await res.json();
+        console.log("[frontend] success response parsed", { keys: Object.keys(data || {}) });
         matchData = data;
-        fetchCompleted = true;
       })
       .catch((err) => {
+        console.error("[frontend] error received", err);
         fetchError = err;
-        fetchCompleted = true;
+      })
+      .finally(() => {
+        console.log("[frontend] loading finished");
+        finalizeRequest();
       });
 
     } catch (err) {
+      console.error("[frontend] request setup failed", err);
       fetchError = err;
-      fetchCompleted = true;
+      finalizeRequest();
     }
   });
 
