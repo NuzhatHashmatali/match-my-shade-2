@@ -18,6 +18,25 @@ function getAI(): GoogleGenAI | null {
   return aiClient;
 }
 
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`${label} timed out after ${timeoutMs}ms`));
+    }, timeoutMs);
+
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      }
+    );
+  });
+}
+
 function labToRgb(l: number, a: number, b: number): [number, number, number] {
   let y = (l + 16) / 116;
   let x = a / 500 + y;
@@ -282,6 +301,7 @@ async function analyzeImageWithGemini(buffer: Buffer, mimeType: string) {
   const ai = getAI();
   if (!ai) return null;
 
+  const startedAt = Date.now();
   try {
     const base64Data = buffer.toString("base64");
     const responsePromise = ai.models.generateContent({
@@ -302,34 +322,40 @@ async function analyzeImageWithGemini(buffer: Buffer, mimeType: string) {
       }
     });
 
-    const response = await Promise.race([
-      responsePromise,
-      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("gemini-timeout")), 1400))
-    ]);
+    const response = await withTimeout(responsePromise, 1800, "gemini-analysis");
 
     const resultText = response.text?.trim() || "{}";
     const parsed = JSON.parse(resultText);
     if (parsed && typeof parsed === "object") {
+      console.log(`[match] AI recommendation completed in ${Date.now() - startedAt}ms`);
       return parsed;
     }
   } catch (err) {
-    console.warn("Gemini analysis failed, using local heuristics.", err);
+    console.warn(`[match] Gemini analysis failed after ${Date.now() - startedAt}ms, using local heuristics.`, err);
   }
 
   return null;
 }
 
 async function analyzeImageBuffer(buffer: Buffer, mimeType: string) {
+  const startedAt = Date.now();
+  console.log(`[match] image received`, { mimeType, size: buffer.length });
+
   const geminiResult = await analyzeImageWithGemini(buffer, mimeType);
-  const imageMeta = await sharp(buffer).metadata();
+  const imageMeta = await withTimeout(sharp(buffer).metadata(), 4000, "image metadata");
   const sourceWidth = imageMeta.width || 0;
   const sourceHeight = imageMeta.height || 0;
+  console.log(`[match] face detection started in ${Date.now() - startedAt}ms`);
 
-  const { data, info } = await sharp(buffer)
-    .resize(512, 512, { fit: "cover", withoutEnlargement: true })
-    .removeAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
+  const { data, info } = await withTimeout(
+    sharp(buffer)
+      .resize(512, 512, { fit: "cover", withoutEnlargement: true })
+      .removeAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true }),
+    6000,
+    "image processing"
+  );
 
   const pixels = new Uint8ClampedArray(data.buffer);
   const width = info.width;
@@ -431,6 +457,7 @@ async function analyzeImageBuffer(buffer: Buffer, mimeType: string) {
   };
 
   const poorQuality = quality.lighting === "poor" || quality.blur === "poor" || quality.exposure === "poor" || quality.noise === "poor" || quality.whiteBalance === "poor";
+  console.log(`[match] lighting correction completed in ${Date.now() - startedAt}ms`, { quality, poorQuality });
 
   let targetType = geminiResult?.targetType || (sourceWidth > 0 && sourceHeight > 0 && sourceWidth / sourceHeight > 1.35 ? "swatch" : "face");
   if (geminiResult?.targetType === "swatch" || (sourceWidth > 0 && sourceHeight > 0 && sourceWidth / sourceHeight > 1.4)) {
@@ -537,9 +564,11 @@ async function analyzeImageBuffer(buffer: Buffer, mimeType: string) {
 
   const basePixels = sampledPixels.length > 0 ? sampledPixels : skinSamples;
   const selected = basePixels.length > 0 ? estimateSkinToneFromSamples(basePixels) : [240, 200, 180];
+  console.log(`[match] skin extraction completed in ${Date.now() - startedAt}ms`, { targetType, sampledPixels: basePixels.length });
 
   const [r, g, b] = selected;
   const hex = rgbToHex(r, g, b);
+  console.log(`[match] undertone detection completed in ${Date.now() - startedAt}ms`, { hex });
   return {
     hex,
     targetType,
@@ -571,6 +600,7 @@ async function startServer() {
   app.use("/static", express.static(path.join(process.cwd(), "static")));
 
   app.post("/match", upload.single("image"), async (req, res) => {
+    const startedAt = Date.now();
     try {
       if (!req.file) {
         return res.status(400).json({ error: "No image file uploaded." });
@@ -580,58 +610,67 @@ async function startServer() {
         return res.status(400).json({ error: "Please upload a valid image file." });
       }
 
-      const imageAnalysis = await analyzeImageBuffer(req.file.buffer, req.file.mimetype);
-      if (!imageAnalysis?.hex) {
-        return res.status(422).json({ error: "We could not read a usable skin tone from this image. Please upload a better image." });
-      }
+      const processingPromise = (async () => {
+        const imageAnalysis = await analyzeImageBuffer(req.file.buffer, req.file.mimetype);
+        if (!imageAnalysis?.hex) {
+          return res.status(422).json({ error: "We could not read a usable skin tone from this image. Please upload a better image." });
+        }
 
-      if (imageAnalysis.poorQuality) {
-        return res.status(422).json({
-          error: "The image quality is too poor for a reliable match. Please upload a clearer, well-lit photo.",
-          message: "Please upload a clearer, better-lit image so we can match your shade accurately.",
-          quality: imageAnalysis.quality,
-          suggestions: ["Use bright natural light", "Avoid shadows and glare", "Keep the camera steady", "Make sure the face or swatch is clearly visible"]
+        if (imageAnalysis.poorQuality) {
+          return res.status(422).json({
+            error: "The image quality is too poor for a reliable match. Please upload a clearer, well-lit photo.",
+            message: "Please upload a clearer, better-lit image so we can match your shade accurately.",
+            quality: imageAnalysis.quality,
+            suggestions: ["Use bright natural light", "Avoid shadows and glare", "Keep the camera steady", "Make sure the face or swatch is clearly visible"]
+          });
+        }
+
+        const [tr, tg, tb] = hexToRgb(imageAnalysis.hex);
+        const [tL, tA, tB] = rgbToLab(tr, tg, tb);
+        const matches = enrichedShades.map((shade) => {
+          const [sL, sA, sB] = shade.lab;
+          const distance = cieDe2000([tL, tA, tB], [sL, sA, sB]);
+          const accuracyVal = Math.max(0, Math.min(100, Math.round(100 - distance * 2.4)));
+          const confidence = Math.max(0, Math.min(100, Math.round((accuracyVal * 0.85) + (imageAnalysis.confidence * 0.15))));
+          return {
+            brand: shade.brand,
+            name: shade.name,
+            hex: shade.hex,
+            accuracy: accuracyVal,
+            confidence,
+            price: shade.price,
+            date_added: shade.date_added,
+            product: shade.product,
+            shade: shade.shade,
+            spf: shade.spf,
+            coverage: shade.coverage,
+            finish: shade.finish,
+            undertone: shade.undertone,
+            skin_type: shade.skin_type
+          };
         });
-      }
 
-      const [tr, tg, tb] = hexToRgb(imageAnalysis.hex);
-      const [tL, tA, tB] = rgbToLab(tr, tg, tb);
-      const matches = enrichedShades.map((shade) => {
-        const [sL, sA, sB] = shade.lab;
-        const distance = cieDe2000([tL, tA, tB], [sL, sA, sB]);
-        const accuracyVal = Math.max(0, Math.min(100, Math.round(100 - distance * 2.4)));
-        const confidence = Math.max(0, Math.min(100, Math.round((accuracyVal * 0.85) + (imageAnalysis.confidence * 0.15))));
-        return {
-          brand: shade.brand,
-          name: shade.name,
-          hex: shade.hex,
-          accuracy: accuracyVal,
-          confidence,
-          price: shade.price,
-          date_added: shade.date_added,
-          product: shade.product,
-          shade: shade.shade,
-          spf: shade.spf,
-          coverage: shade.coverage,
-          finish: shade.finish,
-          undertone: shade.undertone,
-          skin_type: shade.skin_type
-        };
-      });
+        const topMatches = matches.sort((a, b) => b.accuracy - a.accuracy).slice(0, 5);
+        console.log(`[match] foundation matching completed in ${Date.now() - startedAt}ms`, { count: topMatches.length });
+        const assistant = buildAssistantPayload(imageAnalysis, topMatches, imageAnalysis.hex);
+        console.log(`[match] AI recommendation completed in ${Date.now() - startedAt}ms`);
+        res.json({
+          matches: topMatches,
+          confidence: imageAnalysis.confidence,
+          quality: imageAnalysis.quality,
+          targetType: imageAnalysis.targetType,
+          detectedHex: imageAnalysis.hex,
+          assistant
+        });
+        console.log(`[match] response sent in ${Date.now() - startedAt}ms`);
+      })();
 
-      const topMatches = matches.sort((a, b) => b.accuracy - a.accuracy).slice(0, 5);
-      const assistant = buildAssistantPayload(imageAnalysis, topMatches, imageAnalysis.hex);
-      res.json({
-        matches: topMatches,
-        confidence: imageAnalysis.confidence,
-        quality: imageAnalysis.quality,
-        targetType: imageAnalysis.targetType,
-        detectedHex: imageAnalysis.hex,
-        assistant
-      });
+      await withTimeout(processingPromise, 12000, "match processing");
     } catch (err) {
-      console.error("Matching error handler:", err);
-      res.status(500).json({ error: "Internal server error during shade matching." });
+      console.error(`[match] matching failed after ${Date.now() - startedAt}ms`, err);
+      if (!res.headersSent) {
+        res.status(504).json({ error: "The match request timed out. Please try again with a smaller image or a stronger connection." });
+      }
     }
   });
 
