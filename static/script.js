@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultsGrid = document.getElementById("resultsGrid");
   const resultsSection = document.getElementById("resultsSection");
   const resultsCount = document.getElementById("resultsCount");
+  const assistantInsights = document.getElementById("assistantInsights");
   const loadingSection = document.getElementById("loadingSection");
   const loadingTitle = document.getElementById("loadingTitle");
   const loadingSubtitle = document.getElementById("loadingSubtitle");
@@ -43,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Application State
   let currentResults = [];
+  let currentAssistantData = null;
   let capturedBlob = null;
   let activeStream = null;
   let activePreviewUrl = null;
@@ -51,6 +53,23 @@ document.addEventListener("DOMContentLoaded", () => {
   let isTorchOn = false;
   let pinchState = null;
   let lastMediaMode = "upload";
+  let availableCameraCount = 0;
+  let tapFocusSupported = false;
+
+  function setCameraViewVisible() {
+    stateUpload.classList.remove("active");
+    statePreview.classList.remove("active");
+    stateCamera.classList.add("active");
+  }
+
+  function updateRetakeButtonLabel() {
+    if (!btnRetake) return;
+    const label = lastMediaMode === "camera" ? "Retake Photo" : "Change Image";
+    btnRetake.innerHTML = `<i data-lucide="rotate-ccw"></i> ${label}`;
+    if (typeof lucide !== "undefined") {
+      lucide.createIcons();
+    }
+  }
 
   // Favorites DOM Cache
   const favoritesSection = document.getElementById("favoritesSection");
@@ -71,16 +90,19 @@ document.addEventListener("DOMContentLoaded", () => {
       fileInput.value = "";
       btnSubmitMatch.disabled = true;
       setCameraStatus("");
+      updateRetakeButtonLabel();
     } else if (state === "camera") {
       stateCamera.classList.add("active");
       capturedBlob = null;
       btnSubmitMatch.disabled = true;
       cameraVideo.style.transform = currentFacingMode === "user" ? "scaleX(-1)" : "none";
+      updateRetakeButtonLabel();
     } else if (state === "preview") {
       statePreview.classList.add("active");
       stopCameraStream();
       btnSubmitMatch.disabled = false;
       setCameraStatus("");
+      updateRetakeButtonLabel();
     }
   }
 
@@ -135,6 +157,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  async function stopActiveCameraTrack() {
+    if (activeStream) {
+      activeStream.getTracks().forEach((track) => track.stop());
+      activeStream = null;
+    }
+    if (cameraVideo) {
+      cameraVideo.pause();
+      cameraVideo.srcObject = null;
+    }
+    pinchState = null;
+  }
+
   async function startCameraStream(requestedFacingMode = currentFacingMode) {
     if (!navigator.mediaDevices?.getUserMedia) {
       setCameraStatus("Camera access is not supported in this browser.", true);
@@ -143,9 +177,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      showState("camera");
+      setCameraViewVisible();
       setCameraStatus("Requesting camera access…");
-      activeStream = await navigator.mediaDevices.getUserMedia({
+      await stopActiveCameraTrack();
+      const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: requestedFacingMode,
           width: { ideal: 1280 },
@@ -153,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         audio: false
       });
+      activeStream = stream;
       currentFacingMode = requestedFacingMode;
       cameraVideo.srcObject = activeStream;
       cameraVideo.muted = true;
@@ -164,6 +200,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const track = activeStream.getVideoTracks()[0];
       const capability = track?.getCapabilities?.();
       const torchSupported = Boolean(capability?.torch);
+      const facingOptions = track?.getSettings?.();
+      availableCameraCount = (await navigator.mediaDevices.enumerateDevices()).filter((device) => device.kind === "videoinput").length;
+      btnSwitchCamera.disabled = availableCameraCount <= 1;
+      btnSwitchCamera.classList.toggle("disabled", availableCameraCount <= 1);
       btnToggleFlash.disabled = !torchSupported;
       btnToggleFlash.classList.toggle("disabled", !torchSupported);
       if (!torchSupported) {
@@ -171,23 +211,25 @@ document.addEventListener("DOMContentLoaded", () => {
         btnToggleFlash.classList.remove("active");
       }
 
+      tapFocusSupported = Boolean(track?.applyConstraints && typeof track.getCapabilities === "function");
+      if (facingOptions?.facingMode) {
+        cameraVideo.setAttribute("data-facing-mode", facingOptions.facingMode);
+      }
+
       setCameraStatus("Live preview ready");
     } catch (err) {
       console.error("Camera access failed:", err);
-      setCameraStatus("Camera access was denied or unavailable. Please upload an image instead.", true);
+      if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+        setCameraStatus("Camera permission was denied. Please allow access or upload an image instead.", true);
+      } else {
+        setCameraStatus("Camera access was denied or unavailable. Please upload an image instead.", true);
+      }
       showState("upload");
     }
   }
 
   function stopCameraStream() {
-    if (activeStream) {
-      activeStream.getTracks().forEach(track => track.stop());
-      activeStream = null;
-    }
-    if (cameraVideo) {
-      cameraVideo.srcObject = null;
-    }
-    pinchState = null;
+    stopActiveCameraTrack();
   }
 
   function getTouchDistance(touches) {
@@ -216,12 +258,29 @@ document.addEventListener("DOMContentLoaded", () => {
     setVideoZoom(currentZoom);
   }
 
+  function handleTapToFocus(event) {
+    if (!activeStream || !tapFocusSupported || !cameraVideo.videoWidth || !cameraVideo.videoHeight) return;
+    const rect = cameraVideo.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * cameraVideo.videoWidth;
+    const y = ((event.clientY - rect.top) / rect.height) * cameraVideo.videoHeight;
+    const track = activeStream.getVideoTracks()[0];
+    if (!track?.applyConstraints) return;
+    const focusPoint = {
+      x: x / cameraVideo.videoWidth,
+      y: y / cameraVideo.videoHeight
+    };
+    track.applyConstraints({
+      advanced: [{ focusMode: "auto", pointsOfInterest: [{ x: focusPoint.x, y: focusPoint.y, weight: 1 }] }]
+    }).catch(() => {});
+  }
+
   if (cameraStreamWrapper) {
     cameraStreamWrapper.addEventListener("touchstart", handlePinchStart, { passive: false });
     cameraStreamWrapper.addEventListener("touchmove", handlePinchMove, { passive: false });
     cameraStreamWrapper.addEventListener("touchend", () => {
       pinchState = null;
     });
+    cameraStreamWrapper.addEventListener("click", handleTapToFocus);
   }
 
   // --- DRAG AND DROP HANDLERS ---
@@ -298,6 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Switch camera
   btnSwitchCamera.addEventListener("click", async () => {
+    if (availableCameraCount <= 1) return;
     const nextFacingMode = currentFacingMode === "user" ? "environment" : "user";
     await startCameraStream(nextFacingMode);
   });
@@ -335,6 +395,9 @@ document.addEventListener("DOMContentLoaded", () => {
     updateZoomUI();
     await setVideoZoom(currentZoom);
   });
+
+  btnZoomIn.disabled = false;
+  btnZoomOut.disabled = false;
 
   // Shutter trigger capture click
   btnShutter.addEventListener("click", async () => {
@@ -380,6 +443,8 @@ document.addEventListener("DOMContentLoaded", () => {
       showState("upload");
     }
   });
+
+  updateRetakeButtonLabel();
 
   // --- SUBMIT MATCH HANDLER ---
   form.addEventListener("submit", async (e) => {
@@ -442,6 +507,7 @@ document.addEventListener("DOMContentLoaded", () => {
             handleMatchFailure(fetchError);
           } else if (matchData) {
             currentResults = matchData.matches || [];
+            currentAssistantData = matchData.assistant || null;
             updateResultsView();
             
             // Clean transition to results
@@ -521,8 +587,75 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // --- DISPLAY RESULTS ENGINE ---
+  function renderAssistant(assistantData) {
+    if (!assistantInsights) return;
+
+    if (!assistantData) {
+      assistantInsights.innerHTML = "";
+      assistantInsights.classList.add("hidden");
+      return;
+    }
+
+    const tone = assistantData.detectedSkinTone?.label || "Balanced tone";
+    const undertone = assistantData.detectedUndertone?.label || "Neutral";
+    const depth = assistantData.skinDepth?.label || "Medium";
+    const brightness = assistantData.brightnessLevel?.label || "Balanced";
+    const qualityScore = assistantData.imageQualityScore ?? 0;
+    const confidence = assistantData.matchConfidence ?? 0;
+    const explanation = assistantData.explanation || "Your image was analyzed to guide the best foundation recommendation.";
+    const qualityIssue = assistantData.qualityIssue || "";
+    const qualityTips = (assistantData.qualityTips || []).slice(0, 4);
+    const recommendations = assistantData.recommendations || [];
+
+    const recMarkup = recommendations.map((item) => {
+      if (item.type === "similarShades") {
+        const shades = (item.shades || []).slice(0, 3).map((shade) => `${shade.brand} · ${shade.name}`).join(" • ");
+        return `<li><strong>${item.title}</strong><span>${shades || "More close matches available"}</span></li>`;
+      }
+      const shadeText = item.shade ? `${item.shade.brand} · ${item.shade.name}` : "—";
+      return `<li><strong>${item.title}</strong><span>${shadeText}</span></li>`;
+    }).join("");
+
+    const qualityMarkup = qualityTips.length > 0
+      ? qualityTips.map((tip) => `<li>${tip}</li>`).join("")
+      : `<li>Image quality looks strong enough for a reliable match.</li>`;
+
+    assistantInsights.innerHTML = `
+      <div class="assistant-card">
+        <div class="assistant-card-header">
+          <div>
+            <span class="assistant-pill">AI Beauty Assistant</span>
+            <h3>Why this match was selected</h3>
+          </div>
+          <div class="assistant-score">${qualityScore}% clarity</div>
+        </div>
+        <p class="assistant-summary">${explanation}</p>
+        <div class="assistant-grid">
+          <div class="assistant-stat"><span>Estimated tone</span><strong>${tone}</strong></div>
+          <div class="assistant-stat"><span>Undertone</span><strong>${undertone}</strong></div>
+          <div class="assistant-stat"><span>Depth</span><strong>${depth}</strong></div>
+          <div class="assistant-stat"><span>Brightness</span><strong>${brightness}</strong></div>
+          <div class="assistant-stat"><span>Match confidence</span><strong>${confidence}%</strong></div>
+        </div>
+        ${qualityIssue ? `<div class="assistant-alert">${qualityIssue}</div>` : ""}
+        <div class="assistant-recommendations">
+          <div class="assistant-subsection">
+            <h4>Recommended paths</h4>
+            <ul>${recMarkup}</ul>
+          </div>
+          <div class="assistant-subsection">
+            <h4>Image guidance</h4>
+            <ul>${qualityMarkup}</ul>
+          </div>
+        </div>
+      </div>
+    `;
+    assistantInsights.classList.remove("hidden");
+  }
+
   function displayResults(results) {
     resultsGrid.innerHTML = "";
+    renderAssistant(currentAssistantData);
 
     if (results.length === 0) {
       // Customize message if the filter resulted in 0 items

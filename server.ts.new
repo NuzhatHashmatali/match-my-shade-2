@@ -102,112 +102,6 @@ function rgbToLab(r: number, g: number, b: number): [number, number, number] {
   return [l, a, bVal];
 }
 
-function getUndertoneLabel(r: number, g: number, b: number): { label: string; description: string } {
-  const redBias = r - g;
-  const blueBias = b - g;
-  if (redBias > 18 && redBias > blueBias) {
-    return { label: "Warm", description: "A warm, golden cast is dominant in the sample." };
-  }
-  if (blueBias > 18 && blueBias > redBias) {
-    return { label: "Cool", description: "A cool, pink or bluish cast is dominant in the sample." };
-  }
-  return { label: "Neutral", description: "The sample sits close to a balanced neutral tone." };
-}
-
-function getSkinDepthLabel(l: number): { label: string; description: string } {
-  if (l < 65) {
-    return { label: "Light", description: "The sample leans lighter in overall depth." };
-  }
-  if (l < 78) {
-    return { label: "Medium", description: "The sample sits in the medium depth range." };
-  }
-  return { label: "Deep", description: "The sample leans deeper in overall depth." };
-}
-
-function getBrightnessLabel(quality: { underexposed: boolean; overexposed: boolean }): { label: string; description: string } {
-  if (quality.overexposed) {
-    return { label: "High", description: "The image appears brighter than ideal for reliable matching." };
-  }
-  if (quality.underexposed) {
-    return { label: "Low", description: "The image appears dimmer than ideal for reliable matching." };
-  }
-  return { label: "Balanced", description: "The image brightness looks balanced for matching." };
-}
-
-function getImageQualityScore(quality: any, confidence: number): number {
-  let score = 100;
-  if (quality.blur === "poor") score -= 18;
-  if (quality.exposure === "poor") score -= 18;
-  if (quality.noise === "poor") score -= 12;
-  if (quality.whiteBalance === "poor") score -= 8;
-  if (quality.lighting === "poor") score -= 10;
-  score = Math.max(40, Math.min(100, score));
-  return Math.round(score * 0.8 + confidence * 0.2);
-}
-
-function buildAssistantPayload(imageAnalysis: any, matches: any[], detectedHex: string) {
-  const [r, g, b] = hexToRgb(detectedHex);
-  const [l] = rgbToLab(r, g, b);
-  const undertone = getUndertoneLabel(r, g, b);
-  const depth = getSkinDepthLabel(l);
-  const brightness = getBrightnessLabel(imageAnalysis.quality);
-  const qualityScore = getImageQualityScore(imageAnalysis.quality, imageAnalysis.confidence);
-
-  const recommendations = [] as any[];
-  if (matches.length > 0) {
-    const sortedByPrice = [...matches].sort((a, b) => (a.price || 0) - (b.price || 0));
-    const sortedByPremium = [...matches].sort((a, b) => (b.price || 0) - (a.price || 0));
-    const sortedByAccuracy = [...matches].sort((a, b) => (b.accuracy || 0) - (a.accuracy || 0));
-    const otherBrands = sortedByAccuracy.filter((match) => match.brand !== sortedByAccuracy[0]?.brand).slice(0, 4);
-
-    recommendations.push({
-      type: "bestOverall",
-      title: "Best Overall Match",
-      shade: sortedByAccuracy[0]
-    });
-    recommendations.push({
-      type: "budgetAlternative",
-      title: "Budget Alternative",
-      shade: sortedByPrice[0]
-    });
-    recommendations.push({
-      type: "premiumAlternative",
-      title: "Premium Alternative",
-      shade: sortedByPremium[0]
-    });
-    recommendations.push({
-      type: "similarShades",
-      title: "Similar Shades from Other Brands",
-      shades: otherBrands
-    });
-  }
-
-  const explanation = `Your skin appears ${depth.label.toLowerCase()} with a ${undertone.label.toLowerCase()} undertone. Based on facial skin analysis and CIELAB color matching, this recommendation is the closest match.`;
-  const qualityTips = imageAnalysis.poorQuality ? [
-    "Use brighter, diffused natural light.",
-    "Keep the face or swatch fully in frame and avoid strong shadows.",
-    "Hold the camera steady and avoid blurry motion.",
-    "Make sure the image is not overexposed or underexposed."
-  ] : [];
-
-  return {
-    detectedSkinTone: {
-      label: `${depth.label} ${undertone.label}`,
-      hex: detectedHex,
-      description: `A ${depth.label.toLowerCase()} depth estimate with a ${undertone.label.toLowerCase()} cast.`
-    },
-    detectedUndertone: undertone,
-    skinDepth: depth,
-    brightnessLevel: brightness,
-    imageQualityScore: qualityScore,
-    matchConfidence: Math.round(imageAnalysis.confidence),
-    explanation,
-    recommendations,
-    qualityTips,
-    qualityIssue: imageAnalysis.poorQuality ? "The current image quality is not strong enough for reliable matching." : null
-  };
-}
-
 function clamp(v: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, v));
 }
@@ -231,7 +125,7 @@ function cieDe2000(labA: [number, number, number], labB: [number, number, number
   const meanH = (h1 + h2) / 2;
 
   const t = 1 - 0.17 * Math.cos(meanH - 30 * rad) + 0.24 * Math.cos(2 * meanH) + 0.32 * Math.cos(3 * meanH + 6 * rad) - 0.2 * Math.cos(4 * meanH - 63 * rad);
-  const rT = -2 * Math.sqrt(Math.pow(meanC, 7) / (Math.pow(meanC, 7) + Math.pow(25, 7))) * Math.sin((2 * meanH - 90 * rad) * rad);
+  const rT = -2 * Math.sqrt(Math.pow(meanC, 7) / (Math.pow(meanC, 7) + Math.pow(25, 7)))) * Math.sin((2 * meanH - 90 * rad) * rad);
 
   const sL = 1 + ((0.015 * Math.pow(meanL - 50, 2)) / Math.sqrt(20 + Math.pow(meanL - 50, 2)));
   const sC = 1 + 0.045 * meanC;
@@ -278,13 +172,18 @@ function isSkinTone(r: number, g: number, b: number): boolean {
   );
 }
 
+function quantizeColor(r: number, g: number, b: number): string {
+  const step = 24;
+  return `${Math.round(r / step) * step},${Math.round(g / step) * step},${Math.round(b / step) * step}`;
+}
+
 async function analyzeImageWithGemini(buffer: Buffer, mimeType: string) {
   const ai = getAI();
   if (!ai) return null;
 
   try {
     const base64Data = buffer.toString("base64");
-    const responsePromise = ai.models.generateContent({
+    const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: [
         {
@@ -301,11 +200,6 @@ async function analyzeImageWithGemini(buffer: Buffer, mimeType: string) {
         responseMimeType: "application/json"
       }
     });
-
-    const response = await Promise.race([
-      responsePromise,
-      new Promise<never>((_, reject) => setTimeout(() => reject(new Error("gemini-timeout")), 1400))
-    ]);
 
     const resultText = response.text?.trim() || "{}";
     const parsed = JSON.parse(resultText);
@@ -620,14 +514,12 @@ async function startServer() {
       });
 
       const topMatches = matches.sort((a, b) => b.accuracy - a.accuracy).slice(0, 5);
-      const assistant = buildAssistantPayload(imageAnalysis, topMatches, imageAnalysis.hex);
       res.json({
         matches: topMatches,
         confidence: imageAnalysis.confidence,
         quality: imageAnalysis.quality,
         targetType: imageAnalysis.targetType,
-        detectedHex: imageAnalysis.hex,
-        assistant
+        detectedHex: imageAnalysis.hex
       });
     } catch (err) {
       console.error("Matching error handler:", err);
