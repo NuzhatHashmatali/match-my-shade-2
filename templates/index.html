@@ -57,12 +57,33 @@
 
             <!-- 2. Live Camera View State -->
             <div class="media-state" id="state-camera">
-              <div class="camera-stream-wrapper">
+              <div class="camera-stream-wrapper" id="cameraStreamWrapper">
                 <video id="cameraVideo" autoplay playsinline class="camera-video"></video>
                 <div class="camera-overlay">
                   <div class="camera-scanner-line"></div>
                   <div class="face-guide"></div>
                 </div>
+                <div class="camera-top-controls">
+                  <button type="button" class="camera-chip" id="btnSwitchCamera" title="Switch camera">
+                    <i data-lucide="rotate-cw"></i>
+                    <span>Switch</span>
+                  </button>
+                  <button type="button" class="camera-chip" id="btnToggleFlash" title="Toggle flash">
+                    <i data-lucide="zap"></i>
+                    <span>Flash</span>
+                  </button>
+                </div>
+                <div class="camera-zoom-strip" id="cameraZoomStrip">
+                  <button type="button" class="camera-zoom-btn" id="btnZoomOut" title="Zoom out">
+                    <i data-lucide="minus"></i>
+                  </button>
+                  <input type="range" id="cameraZoomRange" min="1" max="4" step="0.1" value="1">
+                  <span id="cameraZoomValue">1.0x</span>
+                  <button type="button" class="camera-zoom-btn" id="btnZoomIn" title="Zoom in">
+                    <i data-lucide="plus"></i>
+                  </button>
+                </div>
+                <div class="camera-status" id="cameraStatus" role="status" aria-live="polite">Live preview ready</div>
                 <div class="camera-controls">
                   <button type="button" class="btn btn-secondary btn-circle" id="btnCancelCamera" title="Cancel">
                     <i data-lucide="x"></i>

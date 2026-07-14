@@ -20,6 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadingBarFill = document.getElementById("loadingBarFill");
   const imagePreview = document.getElementById("imagePreview");
   const cameraVideo = document.getElementById("cameraVideo");
+  const cameraStreamWrapper = document.getElementById("cameraStreamWrapper");
+  const cameraStatus = document.getElementById("cameraStatus");
 
   // Media States Elements
   const stateUpload = document.getElementById("state-upload");
@@ -32,11 +34,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnShutter = document.getElementById("btnShutter");
   const btnRetake = document.getElementById("btnRetake");
   const btnSubmitMatch = document.getElementById("btnSubmitMatch");
+  const btnSwitchCamera = document.getElementById("btnSwitchCamera");
+  const btnToggleFlash = document.getElementById("btnToggleFlash");
+  const btnZoomIn = document.getElementById("btnZoomIn");
+  const btnZoomOut = document.getElementById("btnZoomOut");
+  const cameraZoomRange = document.getElementById("cameraZoomRange");
+  const cameraZoomValue = document.getElementById("cameraZoomValue");
 
   // Application State
   let currentResults = [];
   let capturedBlob = null;
   let activeStream = null;
+  let activePreviewUrl = null;
+  let currentFacingMode = "user";
+  let currentZoom = 1;
+  let isTorchOn = false;
+  let pinchState = null;
+  let lastMediaMode = "upload";
 
   // Favorites DOM Cache
   const favoritesSection = document.getElementById("favoritesSection");
@@ -52,42 +66,115 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (state === "upload") {
       stateUpload.classList.add("active");
-      // Stop stream if active
       stopCameraStream();
       capturedBlob = null;
       fileInput.value = "";
       btnSubmitMatch.disabled = true;
+      setCameraStatus("");
     } else if (state === "camera") {
       stateCamera.classList.add("active");
       capturedBlob = null;
       btnSubmitMatch.disabled = true;
+      cameraVideo.style.transform = currentFacingMode === "user" ? "scaleX(-1)" : "none";
     } else if (state === "preview") {
       statePreview.classList.add("active");
       stopCameraStream();
       btnSubmitMatch.disabled = false;
+      setCameraStatus("");
     }
   }
 
-  // --- CAMERA UTILITIES ---
-  async function startCameraStream() {
+  function setCameraStatus(message, isError = false) {
+    if (!cameraStatus) return;
+    cameraStatus.textContent = message || "Live preview ready";
+    cameraStatus.classList.toggle("error", Boolean(isError));
+  }
+
+  function releasePreviewUrl() {
+    if (activePreviewUrl) {
+      URL.revokeObjectURL(activePreviewUrl);
+      activePreviewUrl = null;
+    }
+  }
+
+  function updateZoomUI() {
+    currentZoom = Math.max(1, Math.min(4, Number(currentZoom) || 1));
+    if (cameraZoomRange) {
+      cameraZoomRange.value = currentZoom.toFixed(1);
+    }
+    if (cameraZoomValue) {
+      cameraZoomValue.textContent = `${Number(currentZoom).toFixed(1)}x`;
+    }
+  }
+
+  async function setVideoZoom(zoomValue) {
+    if (!activeStream) return;
+    const track = activeStream.getVideoTracks()[0];
+    if (!track?.applyConstraints) return;
+    try {
+      await track.applyConstraints({
+        advanced: [{ zoom: Number(zoomValue) || 1 }]
+      });
+    } catch (zoomErr) {
+      console.warn("Zoom not supported by this camera track:", zoomErr);
+    }
+  }
+
+  async function setTorchEnabled(enabled) {
+    if (!activeStream) return false;
+    const track = activeStream.getVideoTracks()[0];
+    if (!track?.applyConstraints) return false;
+    try {
+      await track.applyConstraints({
+        advanced: [{ torch: Boolean(enabled) }]
+      });
+      return true;
+    } catch (torchErr) {
+      console.warn("Torch is not available for this camera track:", torchErr);
+      return false;
+    }
+  }
+
+  async function startCameraStream(requestedFacingMode = currentFacingMode) {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setCameraStatus("Camera access is not supported in this browser.", true);
+      showState("upload");
+      return;
+    }
+
     try {
       showState("camera");
+      setCameraStatus("Requesting camera access…");
       activeStream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: "user",
+          facingMode: requestedFacingMode,
           width: { ideal: 1280 },
           height: { ideal: 720 }
         },
         audio: false
       });
+      currentFacingMode = requestedFacingMode;
       cameraVideo.srcObject = activeStream;
+      cameraVideo.muted = true;
+      await cameraVideo.play().catch(() => {});
+      cameraVideo.style.transform = currentFacingMode === "user" ? "scaleX(-1)" : "none";
+      updateZoomUI();
+      await setVideoZoom(currentZoom);
+
+      const track = activeStream.getVideoTracks()[0];
+      const capability = track?.getCapabilities?.();
+      const torchSupported = Boolean(capability?.torch);
+      btnToggleFlash.disabled = !torchSupported;
+      btnToggleFlash.classList.toggle("disabled", !torchSupported);
+      if (!torchSupported) {
+        isTorchOn = false;
+        btnToggleFlash.classList.remove("active");
+      }
+
+      setCameraStatus("Live preview ready");
     } catch (err) {
       console.error("Camera access failed:", err);
-      try {
-        alert("Unable to access camera. Please upload an image from your device gallery instead.");
-      } catch (alertErr) {
-        console.error("Alert blocked by sandbox:", alertErr);
-      }
+      setCameraStatus("Camera access was denied or unavailable. Please upload an image instead.", true);
       showState("upload");
     }
   }
@@ -97,7 +184,44 @@ document.addEventListener("DOMContentLoaded", () => {
       activeStream.getTracks().forEach(track => track.stop());
       activeStream = null;
     }
-    cameraVideo.srcObject = null;
+    if (cameraVideo) {
+      cameraVideo.srcObject = null;
+    }
+    pinchState = null;
+  }
+
+  function getTouchDistance(touches) {
+    if (touches.length < 2) return 0;
+    const [first, second] = touches;
+    const dx = first.clientX - second.clientX;
+    const dy = first.clientY - second.clientY;
+    return Math.hypot(dx, dy);
+  }
+
+  function handlePinchStart(event) {
+    if (!activeStream || event.touches.length < 2) return;
+    pinchState = {
+      startDistance: getTouchDistance(event.touches),
+      startZoom: currentZoom
+    };
+  }
+
+  function handlePinchMove(event) {
+    if (!pinchState || event.touches.length < 2) return;
+    event.preventDefault();
+    const distance = getTouchDistance(event.touches);
+    const ratio = distance / pinchState.startDistance;
+    currentZoom = Math.max(1, Math.min(4, pinchState.startZoom * ratio));
+    updateZoomUI();
+    setVideoZoom(currentZoom);
+  }
+
+  if (cameraStreamWrapper) {
+    cameraStreamWrapper.addEventListener("touchstart", handlePinchStart, { passive: false });
+    cameraStreamWrapper.addEventListener("touchmove", handlePinchMove, { passive: false });
+    cameraStreamWrapper.addEventListener("touchend", () => {
+      pinchState = null;
+    });
   }
 
   // --- DRAG AND DROP HANDLERS ---
@@ -149,8 +273,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     capturedBlob = null; // Clear any active captured image
+    lastMediaMode = "upload";
     const reader = new FileReader();
     reader.onload = (e) => {
+      releasePreviewUrl();
       imagePreview.src = e.target.result;
       showState("preview");
     };
@@ -161,7 +287,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Live photo click
   btnLivePhoto.addEventListener("click", () => {
-    startCameraStream();
+    lastMediaMode = "camera";
+    startCameraStream(currentFacingMode);
   });
 
   // Cancel camera click
@@ -169,34 +296,89 @@ document.addEventListener("DOMContentLoaded", () => {
     showState("upload");
   });
 
+  // Switch camera
+  btnSwitchCamera.addEventListener("click", async () => {
+    const nextFacingMode = currentFacingMode === "user" ? "environment" : "user";
+    await startCameraStream(nextFacingMode);
+  });
+
+  // Toggle flash/torch
+  btnToggleFlash.addEventListener("click", async () => {
+    if (!activeStream) return;
+    isTorchOn = !isTorchOn;
+    const applied = await setTorchEnabled(isTorchOn);
+    if (!applied) {
+      isTorchOn = false;
+      btnToggleFlash.classList.remove("active");
+      setCameraStatus("Flash is not available on this device.", true);
+      return;
+    }
+    btnToggleFlash.classList.toggle("active", isTorchOn);
+    setCameraStatus(isTorchOn ? "Flash is on." : "Flash is off.");
+  });
+
+  // Zoom controls
+  btnZoomIn.addEventListener("click", async () => {
+    currentZoom = Math.min(4, currentZoom + 0.5);
+    updateZoomUI();
+    await setVideoZoom(currentZoom);
+  });
+
+  btnZoomOut.addEventListener("click", async () => {
+    currentZoom = Math.max(1, currentZoom - 0.5);
+    updateZoomUI();
+    await setVideoZoom(currentZoom);
+  });
+
+  cameraZoomRange.addEventListener("input", async (event) => {
+    currentZoom = Number(event.target.value);
+    updateZoomUI();
+    await setVideoZoom(currentZoom);
+  });
+
   // Shutter trigger capture click
-  btnShutter.addEventListener("click", () => {
-    if (!cameraVideo.videoWidth) return;
+  btnShutter.addEventListener("click", async () => {
+    if (!cameraVideo.videoWidth || !cameraVideo.videoHeight) return;
 
     const canvas = document.createElement("canvas");
-    canvas.width = cameraVideo.videoWidth;
-    canvas.height = cameraVideo.videoHeight;
-    
+    const maxDimension = 1600;
+    const videoWidth = cameraVideo.videoWidth;
+    const videoHeight = cameraVideo.videoHeight;
+    const scale = Math.min(1, maxDimension / Math.max(videoWidth, videoHeight));
+    canvas.width = Math.max(1, Math.round(videoWidth * scale));
+    canvas.height = Math.max(1, Math.round(videoHeight * scale));
+
     const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
     // Handle horizontal mirror flip for natural selfie look
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
     ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
-    
-    // Reset transform
     ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-    canvas.toBlob((blob) => {
+    const blob = await new Promise((resolve) => {
+      canvas.toBlob((result) => resolve(result), "image/jpeg", 0.9);
+    });
+
+    if (blob) {
       capturedBlob = blob;
+      releasePreviewUrl();
       const previewUrl = URL.createObjectURL(blob);
+      activePreviewUrl = previewUrl;
       imagePreview.src = previewUrl;
       showState("preview");
-    }, "image/jpeg", 0.95);
+      setCameraStatus("Photo captured. Review and submit when ready.");
+    }
   });
 
   // Change / Retake Click
-  btnRetake.addEventListener("click", () => {
-    showState("upload");
+  btnRetake.addEventListener("click", async () => {
+    if (lastMediaMode === "camera") {
+      await startCameraStream(currentFacingMode);
+    } else {
+      showState("upload");
+    }
   });
 
   // --- SUBMIT MATCH HANDLER ---
