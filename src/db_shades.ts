@@ -1,0 +1,4157 @@
+export interface ShadeData {
+  brand: string;
+  name: string;
+  product?: string;
+  shade?: string;
+  lab: [number, number, number];
+  hex?: string;
+  price: number;
+  date_added: string;
+  spf?: number;
+  coverage?: string;
+  finish?: string;
+  undertone?: string;
+  skin_type?: string;
+}
+
+export const shadesDatabase: ShadeData[] = [
+  {
+    "brand": "Swiss Beauty",
+    "product": "High Performance Liquid Foundation",
+    "shade": "White Ivory",
+    "name": "High Performance - White Ivory",
+    "lab": [
+      90.73,
+      3.34,
+      6.1
+    ],
+    "hex": "#f0e2d9",
+    "price": 322,
+    "date_added": "2025-02-15"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "High Performance Liquid Foundation",
+    "shade": "Rose Blush",
+    "name": "High Performance - Rose Blush",
+    "lab": [
+      85.52,
+      10.15,
+      4.86
+    ],
+    "hex": "#edcfcd",
+    "price": 322,
+    "date_added": "2025-02-18"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "High Performance Liquid Foundation",
+    "shade": "Natural Beige",
+    "name": "High Performance - Natural Beige",
+    "lab": [
+      84.38,
+      10.59,
+      12.85
+    ],
+    "hex": "#f0cbbb",
+    "price": 322,
+    "date_added": "2025-03-01"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "High Performance Liquid Foundation",
+    "shade": "Natural Nude",
+    "name": "High Performance - Natural Nude",
+    "lab": [
+      85.53,
+      12.93,
+      22.51
+    ],
+    "hex": "#fdccac",
+    "price": 322,
+    "date_added": "2025-01-20"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "High Performance Liquid Foundation",
+    "shade": "Classic Ivory",
+    "name": "High Performance - Classic Ivory",
+    "lab": [
+      86.05,
+      10.26,
+      26.36
+    ],
+    "hex": "#fccfa6",
+    "price": 322,
+    "date_added": "2025-04-10"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "High Performance Liquid Foundation",
+    "shade": "Medium Beige",
+    "name": "High Performance - Medium Beige",
+    "lab": [
+      80.04,
+      11.88,
+      28.43
+    ],
+    "hex": "#eebd92",
+    "price": 322,
+    "date_added": "2025-05-12"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "High Performance Liquid Foundation",
+    "shade": "Natural Buff",
+    "name": "High Performance - Natural Buff",
+    "lab": [
+      74.78,
+      9.77,
+      27.35
+    ],
+    "hex": "#dbb086",
+    "price": 322,
+    "date_added": "2025-06-02"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "High Performance Liquid Foundation",
+    "shade": "Sun Beige",
+    "name": "High Performance - Sun Beige",
+    "lab": [
+      70.34,
+      16.05,
+      33.52
+    ],
+    "hex": "#daa070",
+    "price": 322,
+    "date_added": "2025-06-15"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "Cover & Blend Foundation Stick",
+    "shade": "Pretty Vanilla",
+    "name": "Cover & Blend Stick - Pretty Vanilla",
+    "lab": [
+      78.03,
+      5.47,
+      27.18
+    ],
+    "hex": "#ddbc8f",
+    "price": 277,
+    "date_added": "2024-11-10"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "Cover & Blend Foundation Stick",
+    "shade": "Fair Buff",
+    "name": "Cover & Blend Stick - Fair Buff",
+    "lab": [
+      80.57,
+      4.04,
+      23.76
+    ],
+    "hex": "#e0c49c",
+    "price": 277,
+    "date_added": "2024-12-05"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "Cover & Blend Foundation Stick",
+    "shade": "Shell Beige",
+    "name": "Cover & Blend Stick - Shell Beige",
+    "lab": [
+      75.3,
+      9.6,
+      23.37
+    ],
+    "hex": "#dab28f",
+    "price": 277,
+    "date_added": "2025-01-14"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "Cover & Blend Foundation Stick",
+    "shade": "Almond Beige",
+    "name": "Cover & Blend Stick - Almond Beige",
+    "lab": [
+      75.57,
+      8.83,
+      28.43
+    ],
+    "hex": "#dcb386",
+    "price": 277,
+    "date_added": "2025-02-28"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "Cover & Blend Foundation Stick",
+    "shade": "Silly Golden",
+    "name": "Cover & Blend Stick - Silly Golden",
+    "lab": [
+      75.29,
+      9.43,
+      29.27
+    ],
+    "hex": "#ddb284",
+    "price": 277,
+    "date_added": "2025-03-22"
+  },
+  {
+    "brand": "Swiss Beauty",
+    "product": "Cover & Blend Foundation Stick",
+    "shade": "Sandalwood",
+    "name": "Cover & Blend Stick - Sandalwood",
+    "lab": [
+      69.22,
+      16.7,
+      37.1
+    ],
+    "hex": "#d99c66",
+    "price": 277,
+    "date_added": "2025-05-01"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "C100 Cool Ivory",
+    "name": "C100 Cool Ivory",
+    "lab": [
+      72.86,
+      16.24,
+      23.91
+    ],
+    "hex": "#dea788",
+    "price": 594,
+    "date_added": "2024-08-12",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "W120 Warm Creme",
+    "name": "W120 Warm Creme",
+    "lab": [
+      78.01,
+      11.4,
+      27.79
+    ],
+    "hex": "#e7b88e",
+    "price": 594,
+    "date_added": "2024-09-01",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "C140 Cool Rose",
+    "name": "C140 Cool Rose",
+    "lab": [
+      72.15,
+      16.41,
+      23.46
+    ],
+    "hex": "#dca587",
+    "price": 455,
+    "date_added": "2024-09-15",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "W160 Warm Sand",
+    "name": "W160 Warm Sand",
+    "lab": [
+      73.78,
+      17.9,
+      30.14
+    ],
+    "hex": "#e6a87f",
+    "price": 455,
+    "date_added": "2024-10-10",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "N200 Neutral Nude",
+    "name": "N200 Neutral Nude",
+    "lab": [
+      71.71,
+      12.87,
+      27.65
+    ],
+    "hex": "#d7a67e",
+    "price": 455,
+    "date_added": "2024-11-20",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "N220 Neutral Medium",
+    "name": "N220 Neutral Medium",
+    "lab": [
+      72.04,
+      14.18,
+      27.6
+    ],
+    "hex": "#daa67f",
+    "price": 455,
+    "date_added": "2024-12-01",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "W240 Warm Beige",
+    "name": "W240 Warm Beige",
+    "lab": [
+      71.39,
+      14.53,
+      28.34
+    ],
+    "hex": "#d9a47c",
+    "price": 455,
+    "date_added": "2025-01-05",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "N260 Neutral Honey",
+    "name": "N260 Neutral Honey",
+    "lab": [
+      82.19,
+      10.08,
+      16.57
+    ],
+    "hex": "#ebc5ae",
+    "price": 455,
+    "date_added": "2025-01-25",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "C280 Cool Tan",
+    "name": "C280 Cool Tan",
+    "lab": [
+      66.65,
+      20.53,
+      32.87
+    ],
+    "hex": "#d69368",
+    "price": 455,
+    "date_added": "2025-02-14",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "C300 Cool Cinnamon",
+    "name": "C300 Cool Cinnamon",
+    "lab": [
+      71.66,
+      18.21,
+      32.07
+    ],
+    "hex": "#e1a276",
+    "price": 455,
+    "date_added": "2025-03-08",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "W320 Warm Caramel",
+    "name": "W320 Warm Caramel",
+    "lab": [
+      65.35,
+      16.9,
+      36.38
+    ],
+    "hex": "#ce925e",
+    "price": 455,
+    "date_added": "2025-03-29",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "N340 Neutral Almond",
+    "name": "N340 Neutral Almond",
+    "lab": [
+      78.03,
+      9.35,
+      16.99
+    ],
+    "hex": "#debaa2",
+    "price": 455,
+    "date_added": "2025-04-12",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "N360 Neutral Chestnut",
+    "name": "N360 Neutral Chestnut",
+    "lab": [
+      60.5,
+      22.91,
+      38.26
+    ],
+    "hex": "#c9814f",
+    "price": 455,
+    "date_added": "2025-05-02",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "C390 Cool Cocoa",
+    "name": "C390 Cool Cocoa",
+    "lab": [
+      51.93,
+      21.18,
+      25.64
+    ],
+    "hex": "#aa6d51",
+    "price": 455,
+    "date_added": "2025-06-01",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "C380 Cool Walnut",
+    "name": "C380 Cool Walnut",
+    "lab": [
+      66.65,
+      20.53,
+      32.87
+    ],
+    "hex": "#d69368",
+    "price": 455,
+    "date_added": "2025-06-11",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "W110 Warm Light",
+    "name": "W110 Warm Light",
+    "lab": [
+      78.09,
+      18.43,
+      36.08
+    ],
+    "hex": "#f6b37f",
+    "price": 455,
+    "date_added": "2025-06-25",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "N150 Neutral Light",
+    "name": "N150 Neutral Light",
+    "lab": [
+      62.67,
+      18.9,
+      27.35
+    ],
+    "hex": "#c68a68",
+    "price": 550,
+    "date_added": "2025-07-02",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Lakme 9to5",
+    "product": "Lakme 9to5 Foundation",
+    "shade": "W230 Warm Wood",
+    "name": "W230 Warm Wood",
+    "lab": [
+      57.97,
+      23.4,
+      41.36
+    ],
+    "hex": "#c37a43",
+    "price": 455,
+    "date_added": "2025-07-10",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Butter Pecan",
+    "name": "#FauxFilter - Butter Pecan",
+    "lab": [
+      70.34,
+      21.49,
+      34.68
+    ],
+    "hex": "#E39C6E",
+    "price": 3650,
+    "date_added": "2024-05-14",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Baklava 340G",
+    "name": "#FauxFilter - Baklava 340G",
+    "lab": [
+      72.79,
+      17.81,
+      38.37
+    ],
+    "hex": "#E6A56D",
+    "price": 3650,
+    "date_added": "2024-05-20",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Milkshake 100B",
+    "name": "#FauxFilter - Milkshake 100B",
+    "lab": [
+      89.78,
+      7.3,
+      16.37
+    ],
+    "hex": "#FCDCC3",
+    "price": 3650,
+    "date_added": "2024-06-01",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Angel Food 110N",
+    "name": "#FauxFilter - Angel Food 110N",
+    "lab": [
+      89.73,
+      5.22,
+      19.4
+    ],
+    "hex": "#FADDBD",
+    "price": 3650,
+    "date_added": "2024-06-15",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Vanilla 120B",
+    "name": "#FauxFilter - Vanilla 120B",
+    "lab": [
+      89.71,
+      6.42,
+      22.55
+    ],
+    "hex": "#FEDCB7",
+    "price": 3650,
+    "date_added": "2024-07-01",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Cashew 140G",
+    "name": "#FauxFilter - Cashew 140G",
+    "lab": [
+      85.79,
+      9.24,
+      25.43
+    ],
+    "hex": "#F9CFA7",
+    "price": 3650,
+    "date_added": "2024-07-12",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Creme Brulee 150G",
+    "name": "#FauxFilter - Creme Brulee 150G",
+    "lab": [
+      86.85,
+      7.34,
+      29.51
+    ],
+    "hex": "#FBD3A2",
+    "price": 3650,
+    "date_added": "2024-08-03",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Shortbread 200B",
+    "name": "#FauxFilter - Shortbread 200B",
+    "lab": [
+      85.51,
+      10.95,
+      27.19
+    ],
+    "hex": "#FCCDA3",
+    "price": 3650,
+    "date_added": "2024-08-20",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Chai 210B",
+    "name": "#FauxFilter - Chai 210B",
+    "lab": [
+      79.8,
+      12.4,
+      32.44
+    ],
+    "hex": "#F0BC8A",
+    "price": 3650,
+    "date_added": "2024-09-02",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Custard 220N",
+    "name": "#FauxFilter - Custard 220N",
+    "lab": [
+      78.87,
+      17.53,
+      31.13
+    ],
+    "hex": "#F5B68A",
+    "price": 3650,
+    "date_added": "2024-09-18",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Macaroon 230N",
+    "name": "#FauxFilter - Macaroon 230N",
+    "lab": [
+      80.29,
+      15.58,
+      35.84
+    ],
+    "hex": "#F8BB85",
+    "price": 3650,
+    "date_added": "2024-10-01",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Toasted Coconut 240N",
+    "name": "#FauxFilter - Toasted Coconut 240N",
+    "lab": [
+      77.41,
+      15.76,
+      36.65
+    ],
+    "hex": "#F0B37C",
+    "price": 3650,
+    "date_added": "2024-10-15",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Cheesecake 250G",
+    "name": "#FauxFilter - Cheesecake 250G",
+    "lab": [
+      78.33,
+      16.66,
+      33.71
+    ],
+    "hex": "#F3B584",
+    "price": 3650,
+    "date_added": "2024-11-01",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Apple Pie 255B",
+    "name": "#FauxFilter - Apple Pie 255B",
+    "lab": [
+      77.03,
+      20.05,
+      35.21
+    ],
+    "hex": "#F5AF7E",
+    "price": 3650,
+    "date_added": "2024-11-12",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Cream Puff 260W",
+    "name": "#FauxFilter - Cream Puff 260W",
+    "lab": [
+      78.05,
+      18.15,
+      37.58
+    ],
+    "hex": "#F6B37C",
+    "price": 3650,
+    "date_added": "2024-12-01",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Latte 300N",
+    "name": "#FauxFilter - Latte 300N",
+    "lab": [
+      71.51,
+      17.52,
+      33.45
+    ],
+    "hex": "#E0A273",
+    "price": 3650,
+    "date_added": "2024-12-15",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Iced Frappe 305C",
+    "name": "#FauxFilter - Iced Frappe 305C",
+    "lab": [
+      72.32,
+      16.5,
+      31.13
+    ],
+    "hex": "#E0A579",
+    "price": 3650,
+    "date_added": "2025-01-02",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Golden Milk 307N",
+    "name": "#FauxFilter - Golden Milk 307N",
+    "lab": [
+      71.51,
+      17.29,
+      37.17
+    ],
+    "hex": "#E1A26C",
+    "price": 3650,
+    "date_added": "2025-01-10",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Amaretti 310G",
+    "name": "#FauxFilter - Amaretti 310G",
+    "lab": [
+      71.64,
+      16.35,
+      37.31
+    ],
+    "hex": "#E0A36C",
+    "price": 3650,
+    "date_added": "2025-01-20",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Tres Leches 320G",
+    "name": "#FauxFilter - Tres Leches 320G",
+    "lab": [
+      70.72,
+      17.23,
+      35.57
+    ],
+    "hex": "#DEA06D",
+    "price": 3650,
+    "date_added": "2025-02-01",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Dulce De Leche 350G",
+    "name": "#FauxFilter - Dulce De Leche 350G",
+    "lab": [
+      72,
+      18.7,
+      44.61
+    ],
+    "hex": "#E7A25F",
+    "price": 3650,
+    "date_added": "2025-02-15",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Creme Caramel 355W",
+    "name": "#FauxFilter - Creme Caramel 355W",
+    "lab": [
+      69.74,
+      18.73,
+      43.75
+    ],
+    "hex": "#E09C5B",
+    "price": 3650,
+    "date_added": "2025-03-01",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Macchiato 400G",
+    "name": "#FauxFilter - Macchiato 400G",
+    "lab": [
+      68.46,
+      21.07,
+      41.67
+    ],
+    "hex": "#DF975C",
+    "price": 3650,
+    "date_added": "2025-03-12",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Toffee 420G",
+    "name": "#FauxFilter - Toffee 420G",
+    "lab": [
+      65.39,
+      20.87,
+      43.4
+    ],
+    "hex": "#D68F51",
+    "price": 3650,
+    "date_added": "2025-03-20",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Pistachio Cream 425N",
+    "name": "#FauxFilter - Pistachio Cream 425N",
+    "lab": [
+      66.1,
+      22.29,
+      39.17
+    ],
+    "hex": "#D9905B",
+    "price": 3650,
+    "date_added": "2025-04-01",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Gingerbread 430N",
+    "name": "#FauxFilter - Gingerbread 430N",
+    "lab": [
+      63.25,
+      24.22,
+      41.86
+    ],
+    "hex": "#D4874F",
+    "price": 3650,
+    "date_added": "2025-04-10",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Cinnamon 440G",
+    "name": "#FauxFilter - Cinnamon 440G",
+    "lab": [
+      62,
+      26.35,
+      45
+    ],
+    "hex": "#D48246",
+    "price": 3650,
+    "date_added": "2025-04-20",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Chocolate Mousse 450G",
+    "name": "#FauxFilter - Chocolate Mousse 450G",
+    "lab": [
+      52.05,
+      25.99,
+      41.39
+    ],
+    "hex": "#B56935",
+    "price": 3650,
+    "date_added": "2025-05-01",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Peanut Butter 455R",
+    "name": "#FauxFilter - Peanut Butter 455R",
+    "lab": [
+      41.4,
+      20.63,
+      40.43
+    ],
+    "hex": "#8F531D",
+    "price": 3650,
+    "date_added": "2025-05-15",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Mocha 500G",
+    "name": "#FauxFilter - Mocha 500G",
+    "lab": [
+      42.5,
+      17.63,
+      33.98
+    ],
+    "hex": "#8D582C",
+    "price": 3650,
+    "date_added": "2025-05-25",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Cocoa 510R",
+    "name": "#FauxFilter - Cocoa 510R",
+    "lab": [
+      42.17,
+      17.22,
+      20.88
+    ],
+    "hex": "#885842",
+    "price": 3650,
+    "date_added": "2025-06-01",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Hot Fudge 550R",
+    "name": "#FauxFilter - Hot Fudge 550R",
+    "lab": [
+      35.41,
+      15.94,
+      16.96
+    ],
+    "hex": "#734939",
+    "price": 3650,
+    "date_added": "2025-06-10",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Ganache 560R",
+    "name": "#FauxFilter - Ganache 560R",
+    "lab": [
+      30.74,
+      15.11,
+      11.59
+    ],
+    "hex": "#643F37",
+    "price": 3650,
+    "date_added": "2025-06-20",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Chocolate Swirl 570W",
+    "name": "#FauxFilter - Chocolate Swirl 570W",
+    "lab": [
+      23.44,
+      19.58,
+      19.82
+    ],
+    "hex": "#592B1B",
+    "price": 3650,
+    "date_added": "2025-06-30",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Truffle Cake 580N",
+    "name": "#FauxFilter - Truffle Cake 580N",
+    "lab": [
+      19.39,
+      14.64,
+      14.86
+    ],
+    "hex": "#48261A",
+    "price": 3650,
+    "date_added": "2025-07-02",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "True Lava Cake 590R",
+    "name": "#FauxFilter - True Lava Cake 590R",
+    "lab": [
+      26.87,
+      16.74,
+      13.97
+    ],
+    "hex": "#5D352B",
+    "price": 3650,
+    "date_added": "2025-07-05",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Molten Cocoa 595R",
+    "name": "#FauxFilter - Molten Cocoa 595R",
+    "lab": [
+      10.93,
+      9.91,
+      4.94
+    ],
+    "hex": "#2C1817",
+    "price": 3650,
+    "date_added": "2025-07-08",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "#FauxFilter Luminous Matte Foundation",
+    "shade": "Espresso 600N",
+    "name": "#FauxFilter - Espresso 600N",
+    "lab": [
+      23.37,
+      6.43,
+      7.36
+    ],
+    "hex": "#45342D",
+    "price": 3650,
+    "date_added": "2025-07-12",
+    "finish": "Luminous Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Butter pecan 330N",
+    "name": "Easy Blur - Butter pecan 330N",
+    "lab": [
+      70.34,
+      21.49,
+      34.68
+    ],
+    "hex": "#E39C6E",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool Pink"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Baklava 340G",
+    "name": "Easy Blur - Baklava 340G",
+    "lab": [
+      72.79,
+      17.81,
+      38.37
+    ],
+    "hex": "#E6A56D",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Milkshake 100B",
+    "name": "Easy Blur - Milkshake 100B",
+    "lab": [
+      89.78,
+      7.3,
+      16.37
+    ],
+    "hex": "#FCDCC3",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool Pink"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Angel food 110N",
+    "name": "Easy Blur - Angel food 110N",
+    "lab": [
+      89.73,
+      5.22,
+      19.4
+    ],
+    "hex": "#FADDBD",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Vanilla 120B",
+    "name": "Easy Blur - Vanilla 120B",
+    "lab": [
+      89.71,
+      6.42,
+      22.55
+    ],
+    "hex": "#FEDCB7",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool Pink"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Cashew 140G",
+    "name": "Easy Blur - Cashew 140G",
+    "lab": [
+      85.79,
+      9.24,
+      25.43
+    ],
+    "hex": "#F9CFA7",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Creme Brulee 150G",
+    "name": "Easy Blur - Creme Brulee 150G",
+    "lab": [
+      86.85,
+      7.34,
+      29.51
+    ],
+    "hex": "#FBD3A2",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Shortbread 200B",
+    "name": "Easy Blur - Shortbread 200B",
+    "lab": [
+      85.51,
+      10.95,
+      27.19
+    ],
+    "hex": "#FCCDA3",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool Pink"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Chai 210B",
+    "name": "Easy Blur - Chai 210B",
+    "lab": [
+      79.8,
+      12.4,
+      32.44
+    ],
+    "hex": "#F0BC8A",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool Pink"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Custard 220N",
+    "name": "Easy Blur - Custard 220N",
+    "lab": [
+      78.87,
+      17.53,
+      31.13
+    ],
+    "hex": "#F5B68A",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Macaroon 230N",
+    "name": "Easy Blur - Macaroon 230N",
+    "lab": [
+      80.29,
+      15.58,
+      35.84
+    ],
+    "hex": "#F8BB85",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Toasted Coconut 240N",
+    "name": "Easy Blur - Toasted Coconut 240N",
+    "lab": [
+      77.41,
+      15.76,
+      36.65
+    ],
+    "hex": "#F0B37C",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Cheesecake 250G",
+    "name": "Easy Blur - Cheesecake 250G",
+    "lab": [
+      78.33,
+      16.66,
+      33.71
+    ],
+    "hex": "#F3B584",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Apple pie 255B",
+    "name": "Easy Blur - Apple pie 255B",
+    "lab": [
+      77.03,
+      20.05,
+      35.21
+    ],
+    "hex": "#F5AF7E",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool Pink"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Cream puff 260W",
+    "name": "Easy Blur - Cream puff 260W",
+    "lab": [
+      78.05,
+      18.15,
+      37.58
+    ],
+    "hex": "#F6B37C",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Latte 300N",
+    "name": "Easy Blur - Latte 300N",
+    "lab": [
+      71.51,
+      17.52,
+      33.45
+    ],
+    "hex": "#E0A273",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Iced Frappe 305C",
+    "name": "Easy Blur - Iced Frappe 305C",
+    "lab": [
+      72.32,
+      16.5,
+      31.13
+    ],
+    "hex": "#E0A579",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Golden Milk 307N",
+    "name": "Easy Blur - Golden Milk 307N",
+    "lab": [
+      71.51,
+      17.29,
+      37.17
+    ],
+    "hex": "#E1A26C",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Amaretti 310G",
+    "name": "Easy Blur - Amaretti 310G",
+    "lab": [
+      71.64,
+      16.35,
+      37.31
+    ],
+    "hex": "#E0A36C",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Tres Leches 320G",
+    "name": "Easy Blur - Tres Leches 320G",
+    "lab": [
+      70.72,
+      17.23,
+      35.57
+    ],
+    "hex": "#DEA06D",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Dulce De Leche 350G",
+    "name": "Easy Blur - Dulce De Leche 350G",
+    "lab": [
+      72,
+      18.7,
+      44.61
+    ],
+    "hex": "#E7A25F",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Creme Caramel 355W",
+    "name": "Easy Blur - Creme Caramel 355W",
+    "lab": [
+      69.74,
+      18.73,
+      43.75
+    ],
+    "hex": "#E09C5B",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Macchiato 400G",
+    "name": "Easy Blur - Macchiato 400G",
+    "lab": [
+      68.46,
+      21.07,
+      41.67
+    ],
+    "hex": "#DF975C",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Toffee 420G",
+    "name": "Easy Blur - Toffee 420G",
+    "lab": [
+      65.39,
+      20.87,
+      43.4
+    ],
+    "hex": "#D68F51",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Pistachio cream 425N",
+    "name": "Easy Blur - Pistachio cream 425N",
+    "lab": [
+      66.1,
+      22.29,
+      39.17
+    ],
+    "hex": "#D9905B",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Gingerbread 430N",
+    "name": "Easy Blur - Gingerbread 430N",
+    "lab": [
+      63.25,
+      24.22,
+      41.86
+    ],
+    "hex": "#D4874F",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Cinnamon 440G",
+    "name": "Easy Blur - Cinnamon 440G",
+    "lab": [
+      62,
+      26.35,
+      45
+    ],
+    "hex": "#D48246",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Chocolate mousse 450G",
+    "name": "Easy Blur - Chocolate mousse 450G",
+    "lab": [
+      52.05,
+      25.99,
+      41.39
+    ],
+    "hex": "#B56935",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Peanut butter 455R",
+    "name": "Easy Blur - Peanut butter 455R",
+    "lab": [
+      41.4,
+      20.63,
+      40.43
+    ],
+    "hex": "#8F531D",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool Red"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Mocha 500G",
+    "name": "Easy Blur - Mocha 500G",
+    "lab": [
+      42.5,
+      17.63,
+      33.98
+    ],
+    "hex": "#8D582C",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "cocoa 510R",
+    "name": "Easy Blur - cocoa 510R",
+    "lab": [
+      42.17,
+      17.22,
+      20.88
+    ],
+    "hex": "#885842",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool Red"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Hot Fudge 550R",
+    "name": "Easy Blur - Hot Fudge 550R",
+    "lab": [
+      35.41,
+      15.94,
+      16.96
+    ],
+    "hex": "#734939",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool Red"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Ganache 560R",
+    "name": "Easy Blur - Ganache 560R",
+    "lab": [
+      30.74,
+      15.11,
+      11.59
+    ],
+    "hex": "#643F37",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm Golden"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Chocolate Swirl 570W",
+    "name": "Easy Blur - Chocolate Swirl 570W",
+    "lab": [
+      23.44,
+      19.58,
+      19.82
+    ],
+    "hex": "#592B1B",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Truffle Cake 580N",
+    "name": "Easy Blur - Truffle Cake 580N",
+    "lab": [
+      19.39,
+      14.64,
+      14.86
+    ],
+    "hex": "#48261A",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "True Lava Cake 590R",
+    "name": "Easy Blur - True Lava Cake 590R",
+    "lab": [
+      26.87,
+      16.74,
+      13.97
+    ],
+    "hex": "#5D352B",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool Red"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Molten Cocoa 595R",
+    "name": "Easy Blur - Molten Cocoa 595R",
+    "lab": [
+      10.93,
+      9.91,
+      4.94
+    ],
+    "hex": "#2C1817",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool Red"
+  },
+  {
+    "brand": "Huda Beauty",
+    "product": "Easy Blur Foundation",
+    "shade": "Espresso 600N",
+    "name": "Easy Blur - Espresso 600N",
+    "lab": [
+      23.37,
+      6.43,
+      7.36
+    ],
+    "hex": "#45342D",
+    "price": 4500,
+    "date_added": "2026-07-14",
+    "finish": "Blurring Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Neutral"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC 5",
+    "name": "Studio Fix Fluid - NC 5",
+    "lab": [
+      79.67,
+      9.89,
+      19.37
+    ],
+    "hex": "#E5BEA2",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW10",
+    "name": "Studio Fix Fluid - NW10",
+    "lab": [
+      83.45,
+      9.11,
+      18.37
+    ],
+    "hex": "#EEC9AE",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC12",
+    "name": "Studio Fix Fluid - NC12",
+    "lab": [
+      85.11,
+      4.32,
+      13.2
+    ],
+    "hex": "#E7D1BC",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC13",
+    "name": "Studio Fix Fluid - NC13",
+    "lab": [
+      85.45,
+      6.44,
+      23.3
+    ],
+    "hex": "#F2D0AA",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC15",
+    "name": "Studio Fix Fluid - NC15",
+    "lab": [
+      75.13,
+      10.04,
+      29.09
+    ],
+    "hex": "#DDB184",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC20",
+    "name": "Studio Fix Fluid - NC20",
+    "lab": [
+      69.67,
+      11.97,
+      30.76
+    ],
+    "hex": "#D1A173",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC25",
+    "name": "Studio Fix Fluid - NC25",
+    "lab": [
+      69.18,
+      14.41,
+      32.33
+    ],
+    "hex": "#D49E6F",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC30",
+    "name": "Studio Fix Fluid - NC30",
+    "lab": [
+      70.28,
+      8.53,
+      27.71
+    ],
+    "hex": "#CCA57A",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC35",
+    "name": "Studio Fix Fluid - NC35",
+    "lab": [
+      67.46,
+      13.72,
+      29.94
+    ],
+    "hex": "#CD9A6F",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC37",
+    "name": "Studio Fix Fluid - NC37",
+    "lab": [
+      65.06,
+      14.69,
+      31.06
+    ],
+    "hex": "#C89367",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC40",
+    "name": "Studio Fix Fluid - NC40",
+    "lab": [
+      63.94,
+      13.4,
+      28.93
+    ],
+    "hex": "#C29168",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC42",
+    "name": "Studio Fix Fluid - NC42",
+    "lab": [
+      64.23,
+      15.76,
+      33.24
+    ],
+    "hex": "#C89061",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC44",
+    "name": "Studio Fix Fluid - NC44",
+    "lab": [
+      61.49,
+      14.47,
+      27.26
+    ],
+    "hex": "#BC8A65",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC45",
+    "name": "Studio Fix Fluid - NC45",
+    "lab": [
+      59.73,
+      16.39,
+      30.47
+    ],
+    "hex": "#BB845B",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC45.5",
+    "name": "Studio Fix Fluid - NC45.5",
+    "lab": [
+      58.15,
+      11.99,
+      27.62
+    ],
+    "hex": "#AF835C",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC46",
+    "name": "Studio Fix Fluid - NC46",
+    "lab": [
+      55.7,
+      15.89,
+      31.12
+    ],
+    "hex": "#AF7A50",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW13",
+    "name": "Studio Fix Fluid - NW13",
+    "lab": [
+      79.21,
+      9.27,
+      21.93
+    ],
+    "hex": "#E4BD9C",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "N4.5",
+    "name": "Studio Fix Fluid - N4.5",
+    "lab": [
+      76.01,
+      8.52,
+      17.31
+    ],
+    "hex": "#D7B59C",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "N4.75",
+    "name": "Studio Fix Fluid - N4.75",
+    "lab": [
+      79.27,
+      6.7,
+      18.73
+    ],
+    "hex": "#DEBFA2",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC16",
+    "name": "Studio Fix Fluid - NC16",
+    "lab": [
+      76.38,
+      8.09,
+      22.17
+    ],
+    "hex": "#DAB694",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC17",
+    "name": "Studio Fix Fluid - NC17",
+    "lab": [
+      70.69,
+      8.74,
+      26.65
+    ],
+    "hex": "#CDA67D",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC18",
+    "name": "Studio Fix Fluid - NC18",
+    "lab": [
+      72.7,
+      12.39,
+      27.4
+    ],
+    "hex": "#D9A981",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW15",
+    "name": "Studio Fix Fluid - NW15",
+    "lab": [
+      75.08,
+      7.01,
+      25.17
+    ],
+    "hex": "#D6B38B",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW18",
+    "name": "Studio Fix Fluid - NW18",
+    "lab": [
+      72.7,
+      12.39,
+      27.4
+    ],
+    "hex": "#D9A981",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "C40",
+    "name": "Studio Fix Fluid - C40",
+    "lab": [
+      81.6898,
+      7.0019,
+      26.98
+    ],
+    "hex": "#eac599",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Cool (Olive/Golden)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW20",
+    "name": "Studio Fix Fluid - NW20",
+    "lab": [
+      65.8879,
+      12.4544,
+      23.8789
+    ],
+    "hex": "#c49776",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "N6",
+    "name": "Studio Fix Fluid - N6",
+    "lab": [
+      70.58,
+      11.42,
+      26.58
+    ],
+    "hex": "#d1a47d",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "C3.5",
+    "name": "Studio Fix Fluid - C3.5",
+    "lab": [
+      76.8963,
+      9.86,
+      27.26
+    ],
+    "hex": "#e1b68c",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Cool (Olive/Golden)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "N6.5",
+    "name": "Studio Fix Fluid - N6.5",
+    "lab": [
+      74.4839,
+      10.8413,
+      23.89
+    ],
+    "hex": "#daaf8c",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC38",
+    "name": "Studio Fix Fluid - NC38",
+    "lab": [
+      65.2486,
+      9.3827,
+      30.05
+    ],
+    "hex": "#c09769",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "C4.5",
+    "name": "Studio Fix Fluid - C4.5",
+    "lab": [
+      78.14,
+      12.02,
+      26.93
+    ],
+    "hex": "#e8b890",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Cool (Olive/Golden)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "C45",
+    "name": "Studio Fix Fluid - C45",
+    "lab": [
+      71.88,
+      5.36,
+      33.57
+    ],
+    "hex": "#ceab73",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Cool (Olive/Golden)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "C55",
+    "name": "Studio Fix Fluid - C55",
+    "lab": [
+      41.71,
+      15.22,
+      27.27
+    ],
+    "hex": "#865836",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Cool (Olive/Golden)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW35",
+    "name": "Studio Fix Fluid - NW35",
+    "lab": [
+      59.04,
+      15.36,
+      28.95
+    ],
+    "hex": "#b7835c",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW43",
+    "name": "Studio Fix Fluid - NW43",
+    "lab": [
+      42.01,
+      17.76,
+      26.6
+    ],
+    "hex": "#8a5738",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW44",
+    "name": "Studio Fix Fluid - NW44",
+    "lab": [
+      33.96,
+      15.22,
+      19.28
+    ],
+    "hex": "#6f4632",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW45",
+    "name": "Studio Fix Fluid - NW45",
+    "lab": [
+      37.63,
+      15.76,
+      24.84
+    ],
+    "hex": "#7b4e31",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW47",
+    "name": "Studio Fix Fluid - NW47",
+    "lab": [
+      33.39,
+      14.38,
+      25.16
+    ],
+    "hex": "#6e4527",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW48",
+    "name": "Studio Fix Fluid - NW48",
+    "lab": [
+      34.19,
+      17.26,
+      22.12
+    ],
+    "hex": "#73452e",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW50",
+    "name": "Studio Fix Fluid - NW50",
+    "lab": [
+      35.9,
+      15.71,
+      23.74
+    ],
+    "hex": "#764a2f",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NC55",
+    "name": "Studio Fix Fluid - NC55",
+    "lab": [
+      27.56,
+      14.35,
+      18.08
+    ],
+    "hex": "#5d3826",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Cool (Golden/Yellow)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW57",
+    "name": "Studio Fix Fluid - NW57",
+    "lab": [
+      19.94,
+      8.72,
+      13.39
+    ],
+    "hex": "#422b1d",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "MAC Cosmetics",
+    "product": "Studio Fix Fluid SPF 15",
+    "shade": "NW60",
+    "name": "Studio Fix Fluid - NW60",
+    "lab": [
+      15.95,
+      8.23,
+      9.9
+    ],
+    "hex": "#37231a",
+    "price": 4000,
+    "date_added": "2026-07-14",
+    "spf": 15,
+    "undertone": "Neutral Warm (Pink/Peach)",
+    "finish": "Natural Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Sensational Foundation SPF 50",
+    "shade": "CREAM CALTANA",
+    "name": "Sensational Foundation - CREAM CALTANA",
+    "lab": [
+      88.6,
+      0.1,
+      8.8
+    ],
+    "hex": "#E5DBCA",
+    "price": 637,
+    "date_added": "2026-07-14",
+    "spf": 50,
+    "coverage": "Full",
+    "finish": "Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Sensational Foundation SPF 50",
+    "shade": "GINGER",
+    "name": "Sensational Foundation - GINGER",
+    "lab": [
+      50.14,
+      24.48,
+      58.05
+    ],
+    "hex": "#B06500",
+    "price": 637,
+    "date_added": "2026-07-14",
+    "spf": 50,
+    "coverage": "Full",
+    "finish": "Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Sensational Foundation SPF 50",
+    "shade": "Biscuit-sns-106",
+    "name": "Sensational Foundation - Biscuit-sns-106",
+    "lab": [
+      60.9,
+      16.5,
+      28.5
+    ],
+    "hex": "#B4835B",
+    "price": 637,
+    "date_added": "2026-07-14",
+    "spf": 50,
+    "coverage": "Full",
+    "finish": "Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Sensational Foundation SPF 50",
+    "shade": "ICON",
+    "name": "Sensational Foundation - ICON",
+    "lab": [
+      61.5,
+      -2.3,
+      -52.1
+    ],
+    "hex": "#2296F3",
+    "price": 637,
+    "date_added": "2026-07-14",
+    "spf": 50,
+    "coverage": "Full",
+    "finish": "Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Sensational Foundation SPF 50",
+    "shade": "KHAKI",
+    "name": "Sensational Foundation - KHAKI",
+    "lab": [
+      90.33,
+      -9.01,
+      44.97
+    ],
+    "hex": "#F0E68C",
+    "price": 637,
+    "date_added": "2026-07-14",
+    "spf": 50,
+    "coverage": "Full",
+    "finish": "Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Sensational Foundation SPF 50",
+    "shade": "MANGO",
+    "name": "Sensational Foundation - MANGO",
+    "lab": [
+      80.58,
+      10.07,
+      82.43
+    ],
+    "hex": "#FDBE02",
+    "price": 637,
+    "date_added": "2026-07-14",
+    "spf": 50,
+    "coverage": "Full",
+    "finish": "Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Sensational Foundation SPF 50",
+    "shade": "WHITE PEACH",
+    "name": "Sensational Foundation - WHITE PEACH",
+    "lab": [
+      91.95,
+      1.8,
+      27.18
+    ],
+    "hex": "#F5EADD",
+    "price": 637,
+    "date_added": "2026-07-14",
+    "spf": 50,
+    "coverage": "Full",
+    "finish": "Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Sensational Foundation SPF 50",
+    "shade": "MEDIUM SAND",
+    "name": "Sensational Foundation - MEDIUM SAND",
+    "lab": [
+      69.3,
+      4.7,
+      23.9
+    ],
+    "hex": "#BDA383",
+    "price": 637,
+    "date_added": "2026-07-14",
+    "spf": 50,
+    "coverage": "Full",
+    "finish": "Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Caramel-FLF004",
+    "name": "Ultra Definition - Caramel-FLF004",
+    "lab": [
+      63.5,
+      18.5,
+      33.0
+    ],
+    "hex": "#C4875E",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Brownie-FLF003",
+    "name": "Ultra Definition - Brownie-FLF003",
+    "lab": [
+      43.9,
+      18.5,
+      25.0
+    ],
+    "hex": "#8A5A3A",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Cheese-Cake-FLF011",
+    "name": "Ultra Definition - Cheese-Cake-FLF011",
+    "lab": [
+      81.9,
+      6.1,
+      20.6
+    ],
+    "hex": "#E4C5A4",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Chestnut-FLF016",
+    "name": "Ultra Definition - Chestnut-FLF016",
+    "lab": [
+      34.9,
+      14.2,
+      18.1
+    ],
+    "hex": "#6F4931",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Chocolate-Mousse-FLF008",
+    "name": "Ultra Definition - Chocolate-Mousse-FLF008",
+    "lab": [
+      65.8,
+      14.6,
+      16.8
+    ],
+    "hex": "#BF8D7C",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Cream Beige (010)",
+    "name": "Ultra Definition - Cream Beige (010)",
+    "lab": [
+      87.7,
+      2.2,
+      16.7
+    ],
+    "hex": "#EEDCC4",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Cream Pie",
+    "name": "Ultra Definition - Cream Pie",
+    "lab": [
+      90.2,
+      1.6,
+      16.9
+    ],
+    "hex": "#F3E1C8",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Custard (FLF012)",
+    "name": "Ultra Definition - Custard (FLF012)",
+    "lab": [
+      74.6,
+      12.2,
+      22.8
+    ],
+    "hex": "#D7AB8A",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Eclair (FLF002)",
+    "name": "Ultra Definition - Eclair (FLF002)",
+    "lab": [
+      37.6,
+      15.4,
+      18.6
+    ],
+    "hex": "#7A4F34",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Espresso (FLF018)",
+    "name": "Ultra Definition - Espresso (FLF018)",
+    "lab": [
+      17.9,
+      9.2,
+      9.6
+    ],
+    "hex": "#3C2218",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Fudge (FLF013)",
+    "name": "Ultra Definition - Fudge (FLF013)",
+    "lab": [
+      49.9,
+      18.2,
+      28.0
+    ],
+    "hex": "#9B6846",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Honey (FLF014)",
+    "name": "Ultra Definition - Honey (FLF014)",
+    "lab": [
+      76.0,
+      12.2,
+      26.8
+    ],
+    "hex": "#DDB089",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Milk Cake (FLF005)",
+    "name": "Ultra Definition - Milk Cake (FLF005)",
+    "lab": [
+      85.7,
+      7.1,
+      20.3
+    ],
+    "hex": "#E9C9AA",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Parlines Cake (FLF006)",
+    "name": "Ultra Definition - Parlines Cake (FLF006)",
+    "lab": [
+      66.9,
+      14.6,
+      28.7
+    ],
+    "hex": "#C99671",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Pecan (FLF015)",
+    "name": "Ultra Definition - Pecan (FLF015)",
+    "lab": [
+      55.0,
+      19.3,
+      27.5
+    ],
+    "hex": "#B27652",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Smoke (FLF019)",
+    "name": "Ultra Definition - Smoke (FLF019)",
+    "lab": [
+      14.9,
+      8.3,
+      7.8
+    ],
+    "hex": "#2F1B14",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Soleil (FLF017)",
+    "name": "Ultra Definition - Soleil (FLF017)",
+    "lab": [
+      21.9,
+      12.0,
+      12.2
+    ],
+    "hex": "#4E2E1F",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Ultra Definition Liquid Foundation",
+    "shade": "Sundae (FLF007)",
+    "name": "Ultra Definition - Sundae (FLF007)",
+    "lab": [
+      69.9,
+      12.9,
+      27.8
+    ],
+    "hex": "#CCA17E",
+    "price": 967,
+    "date_added": "2026-07-14",
+    "coverage": "High",
+    "finish": "Satin / Natural"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Spotlight Glow Stick Foundation",
+    "shade": "Millet",
+    "name": "Spotlight Glow Stick - Millet",
+    "lab": [
+      57.5,
+      10.4,
+      21.8
+    ],
+    "hex": "#A88463",
+    "price": 1062,
+    "date_added": "2026-07-14",
+    "finish": "Glow / Dewy",
+    "coverage": "Medium"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Spotlight Glow Stick Foundation",
+    "shade": "Oats",
+    "name": "Spotlight Glow Stick - Oats",
+    "lab": [
+      82.1,
+      7.8,
+      24.7
+    ],
+    "hex": "#E2C39C",
+    "price": 1062,
+    "date_added": "2026-07-14",
+    "finish": "Glow / Dewy",
+    "coverage": "Medium"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Spotlight Glow Stick Foundation",
+    "shade": "Pearl Barley",
+    "name": "Spotlight Glow Stick - Pearl Barley",
+    "lab": [
+      63.2,
+      17.2,
+      31.0
+    ],
+    "hex": "#C89261",
+    "price": 1062,
+    "date_added": "2026-07-14",
+    "finish": "Glow / Dewy",
+    "coverage": "Medium"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Spotlight Glow Stick Foundation",
+    "shade": "Spelt",
+    "name": "Spotlight Glow Stick - Spelt",
+    "lab": [
+      41.9,
+      12.0,
+      16.3
+    ],
+    "hex": "#7E5E49",
+    "price": 1062,
+    "date_added": "2026-07-14",
+    "finish": "Glow / Dewy",
+    "coverage": "Medium"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Spotlight Glow Stick Foundation",
+    "shade": "Wheat",
+    "name": "Spotlight Glow Stick - Wheat",
+    "lab": [
+      74.0,
+      14.1,
+      27.5
+    ],
+    "hex": "#D9AB7F",
+    "price": 1062,
+    "date_added": "2026-07-14",
+    "finish": "Glow / Dewy",
+    "coverage": "Medium"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Acajou (20.7)",
+    "name": "Coverup - Acajou (20.7)",
+    "lab": [
+      23.0,
+      10.1,
+      9.0
+    ],
+    "hex": "#4C2F27",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Amber (30.4)",
+    "name": "Coverup - Amber (30.4)",
+    "lab": [
+      81.0,
+      10.4,
+      83.0
+    ],
+    "hex": "#FFBF00",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Biscuit (20.2)",
+    "name": "Coverup - Biscuit (20.2)",
+    "lab": [
+      70.2,
+      14.6,
+      29.3
+    ],
+    "hex": "#D2A074",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Bronze (20.5)",
+    "name": "Coverup - Bronze (20.5)",
+    "lab": [
+      60.2,
+      24.0,
+      52.3
+    ],
+    "hex": "#CD7F32",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Caramel (10.3)",
+    "name": "Coverup - Caramel (10.3)",
+    "lab": [
+      86.8,
+      7.9,
+      35.6
+    ],
+    "hex": "#FFD59A",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Cola (30.2)",
+    "name": "Coverup - Cola (30.2)",
+    "lab": [
+      41.6,
+      13.6,
+      16.8
+    ],
+    "hex": "#6D4C38",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Creme (20.3)",
+    "name": "Coverup - Creme (20.3)",
+    "lab": [
+      98.5,
+      -6.5,
+      21.8
+    ],
+    "hex": "#FFFDD0",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Desert (20.1)",
+    "name": "Coverup - Desert (20.1)",
+    "lab": [
+      82.6,
+      8.7,
+      19.9
+    ],
+    "hex": "#E2C2A5",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Maron (30.3)",
+    "name": "Coverup - Maron (30.3)",
+    "lab": [
+      25.5,
+      48.0,
+      38.0
+    ],
+    "hex": "#800000",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Milk-Shake (10.1)",
+    "name": "Coverup - Milk-Shake (10.1)",
+    "lab": [
+      89.1,
+      6.2,
+      16.2
+    ],
+    "hex": "#EED7C3",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Olive (30.1)",
+    "name": "Coverup - Olive (30.1)",
+    "lab": [
+      51.4,
+      -11.7,
+      55.9
+    ],
+    "hex": "#808000",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Sable (10.4)",
+    "name": "Coverup - Sable (10.4)",
+    "lab": [
+      74.5,
+      8.4,
+      14.7
+    ],
+    "hex": "#C9AC95",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Satin (20.4)",
+    "name": "Coverup - Satin (20.4)",
+    "lab": [
+      86.2,
+      6.2,
+      15.9
+    ],
+    "hex": "#E8D1BC",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Sugar (10.2)",
+    "name": "Coverup - Sugar (10.2)",
+    "lab": [
+      87.3,
+      6.5,
+      19.1
+    ],
+    "hex": "#EFD2B6",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "Daily Life Forever52",
+    "product": "Coverup Foundation Cream",
+    "shade": "Toast (20.6)",
+    "name": "Coverup - Toast (20.6)",
+    "lab": [
+      68.6,
+      15.2,
+      24.6
+    ],
+    "hex": "#C79B7A",
+    "price": 1784,
+    "date_added": "2026-07-14",
+    "coverage": "Maximum Full",
+    "finish": "Velvet Matte"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Drop The Base Serum Foundation",
+    "shade": "10 Latte",
+    "name": "Drop The Base - 10 Latte",
+    "lab": [
+      90,
+      2,
+      10
+    ],
+    "hex": "#FFDCB4",
+    "price": 999,
+    "date_added": "2026-07-14",
+    "finish": "Serum Semi-Dewy",
+    "coverage": "Light to Medium"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Drop The Base Serum Foundation",
+    "shade": "15 Cappuccino",
+    "name": "Drop The Base - 15 Cappuccino",
+    "lab": [
+      85,
+      5,
+      12
+    ],
+    "hex": "#F0C8A0",
+    "price": 899,
+    "date_added": "2026-07-14",
+    "finish": "Serum Semi-Dewy",
+    "coverage": "Light to Medium"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Drop The Base Serum Foundation",
+    "shade": "17 Raf",
+    "name": "Drop The Base - 17 Raf",
+    "lab": [
+      80,
+      10,
+      15
+    ],
+    "hex": "#EBBE96",
+    "price": 799,
+    "date_added": "2026-07-14",
+    "finish": "Serum Semi-Dewy",
+    "coverage": "Light to Medium"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Drop The Base Serum Foundation",
+    "shade": "27 Vienna",
+    "name": "Drop The Base - 27 Vienna",
+    "lab": [
+      75,
+      15,
+      20
+    ],
+    "hex": "#E1B48C",
+    "price": 509,
+    "date_added": "2026-07-14",
+    "finish": "Serum Semi-Dewy",
+    "coverage": "Light to Medium"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Drop The Base Serum Foundation",
+    "shade": "32 Cortado",
+    "name": "Drop The Base - 32 Cortado",
+    "lab": [
+      70,
+      20,
+      25
+    ],
+    "hex": "#D7AA82",
+    "price": 764,
+    "date_added": "2026-07-14",
+    "finish": "Serum Semi-Dewy",
+    "coverage": "Light to Medium"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Drop The Base Serum Foundation",
+    "shade": "37 Freddo",
+    "name": "Drop The Base - 37 Freddo",
+    "lab": [
+      65,
+      25,
+      30
+    ],
+    "hex": "#CD9F78",
+    "price": 899,
+    "date_added": "2026-07-14",
+    "finish": "Serum Semi-Dewy",
+    "coverage": "Light to Medium"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Drop The Base Serum Foundation",
+    "shade": "42 Glace",
+    "name": "Drop The Base - 42 Glace",
+    "lab": [
+      60,
+      30,
+      35
+    ],
+    "hex": "#C3966E",
+    "price": 899,
+    "date_added": "2026-07-14",
+    "finish": "Serum Semi-Dewy",
+    "coverage": "Light to Medium"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Drop The Base Serum Foundation",
+    "shade": "50 Mocha",
+    "name": "Drop The Base - 50 Mocha",
+    "lab": [
+      55,
+      35,
+      40
+    ],
+    "hex": "#B98C64",
+    "price": 540,
+    "date_added": "2026-07-14",
+    "finish": "Serum Semi-Dewy",
+    "coverage": "Light to Medium"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Drop The Base Serum Foundation",
+    "shade": "52 Corretto",
+    "name": "Drop The Base - 52 Corretto",
+    "lab": [
+      50,
+      40,
+      45
+    ],
+    "hex": "#AF825A",
+    "price": 799,
+    "date_added": "2026-07-14",
+    "finish": "Serum Semi-Dewy",
+    "coverage": "Light to Medium"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "07 Vanilla Latte",
+    "name": "Ace Of Face - 07 Vanilla Latte",
+    "lab": [
+      95,
+      5,
+      10
+    ],
+    "hex": "#FFE6C8",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "10 Latte",
+    "name": "Ace Of Face - 10 Latte",
+    "lab": [
+      90,
+      10,
+      15
+    ],
+    "hex": "#F5D2B4",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "15 Cappuccino",
+    "name": "Ace Of Face - 15 Cappuccino",
+    "lab": [
+      85,
+      15,
+      20
+    ],
+    "hex": "#F0C8A0",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "17 Raf",
+    "name": "Ace Of Face - 17 Raf",
+    "lab": [
+      80,
+      20,
+      25
+    ],
+    "hex": "#EBBE96",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "20 Galão",
+    "name": "Ace Of Face - 20 Galão",
+    "lab": [
+      75,
+      25,
+      30
+    ],
+    "hex": "#E1B48C",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "25 Macchiato",
+    "name": "Ace Of Face - 25 Macchiato",
+    "lab": [
+      70,
+      30,
+      35
+    ],
+    "hex": "#D7AA82",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "27 Vienna",
+    "name": "Ace Of Face - 27 Vienna",
+    "lab": [
+      65,
+      35,
+      40
+    ],
+    "hex": "#CD9F78",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "30 Chococcino",
+    "name": "Ace Of Face - 30 Chococcino",
+    "lab": [
+      60,
+      40,
+      45
+    ],
+    "hex": "#C3966E",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "32 Cortado",
+    "name": "Ace Of Face - 32 Cortado",
+    "lab": [
+      55,
+      45,
+      50
+    ],
+    "hex": "#B98C64",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "35 Frappe",
+    "name": "Ace Of Face - 35 Frappe",
+    "lab": [
+      50,
+      50,
+      55
+    ],
+    "hex": "#AF825A",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "37 Freddo",
+    "name": "Ace Of Face - 37 Freddo",
+    "lab": [
+      45,
+      55,
+      60
+    ],
+    "hex": "#A57A50",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "40 Breve",
+    "name": "Ace Of Face - 40 Breve",
+    "lab": [
+      40,
+      60,
+      65
+    ],
+    "hex": "#9B6E46",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "42 Glace",
+    "name": "Ace Of Face - 42 Glace",
+    "lab": [
+      35,
+      65,
+      70
+    ],
+    "hex": "#91643C",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "45 Con Panna",
+    "name": "Ace Of Face - 45 Con Panna",
+    "lab": [
+      30,
+      70,
+      75
+    ],
+    "hex": "#875A32",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "48 Irish",
+    "name": "Ace Of Face - 48 Irish",
+    "lab": [
+      25,
+      75,
+      80
+    ],
+    "hex": "#7D5028",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "52 Corretto",
+    "name": "Ace Of Face - 52 Corretto",
+    "lab": [
+      20,
+      80,
+      85
+    ],
+    "hex": "#73461E",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "55 Americano",
+    "name": "Ace Of Face - 55 Americano",
+    "lab": [
+      15,
+      85,
+      90
+    ],
+    "hex": "#693C14",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "57 Borgia",
+    "name": "Ace Of Face - 57 Borgia",
+    "lab": [
+      10,
+      90,
+      95
+    ],
+    "hex": "#5F320A",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "60 Tiramisu",
+    "name": "Ace Of Face - 60 Tiramisu",
+    "lab": [
+      5,
+      95,
+      100
+    ],
+    "hex": "#552800",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "SUGAR Cosmetics",
+    "product": "Ace Of Face Foundation Stick",
+    "shade": "65 Espresso",
+    "name": "Ace Of Face - 65 Espresso",
+    "lab": [
+      0,
+      105,
+      110
+    ],
+    "hex": "#401400",
+    "price": 1149,
+    "date_added": "2026-07-14",
+    "finish": "Waterproof Matte",
+    "coverage": "Full"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 1.1",
+    "name": "24Hrs Weightless - FW 1.1",
+    "lab": [
+      72.78,
+      11.93,
+      18.21
+    ],
+    "hex": "#d4aa92",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 1.2",
+    "name": "24Hrs Weightless - FW 1.2",
+    "lab": [
+      74.38,
+      10.67,
+      21.03
+    ],
+    "hex": "#d8af91",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 1.3",
+    "name": "24Hrs Weightless - FW 1.3",
+    "lab": [
+      67.22,
+      12.12,
+      19.09
+    ],
+    "hex": "#c59b82",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 1.4",
+    "name": "24Hrs Weightless - FW 1.4",
+    "lab": [
+      68.75,
+      13.43,
+      22.41
+    ],
+    "hex": "#cd9e80",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 2.1",
+    "name": "24Hrs Weightless - FW 2.1",
+    "lab": [
+      74.9,
+      17.0,
+      23.56
+    ],
+    "hex": "#E5AC8E",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FC 2.2",
+    "name": "24Hrs Weightless - FC 2.2",
+    "lab": [
+      74.9,
+      17.0,
+      23.56
+    ],
+    "hex": "#E5AC8E",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 2.3",
+    "name": "24Hrs Weightless - FW 2.3",
+    "lab": [
+      74.21,
+      18.28,
+      28.05
+    ],
+    "hex": "#E7A984",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FC 3.2",
+    "name": "24Hrs Weightless - FC 3.2",
+    "lab": [
+      68.16,
+      17.74,
+      32.12
+    ],
+    "hex": "#D6996D",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 3.3",
+    "name": "24Hrs Weightless - FW 3.3",
+    "lab": [
+      76.01,
+      16.59,
+      28.9
+    ],
+    "hex": "#EAAF87",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FC 4.1",
+    "name": "24Hrs Weightless - FC 4.1",
+    "lab": [
+      68.59,
+      12.67,
+      23.81
+    ],
+    "hex": "#CC9E7D",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FC 4.2",
+    "name": "24Hrs Weightless - FC 4.2",
+    "lab": [
+      64.37,
+      14.23,
+      20.66
+    ],
+    "hex": "#C19278",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 4.3",
+    "name": "24Hrs Weightless - FW 4.3",
+    "lab": [
+      57.55,
+      16.15,
+      21.25
+    ],
+    "hex": "#B17F66",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 4.4",
+    "name": "24Hrs Weightless - FW 4.4",
+    "lab": [
+      59.02,
+      14.46,
+      19.87
+    ],
+    "hex": "#B2846C",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 5.1",
+    "name": "24Hrs Weightless - FW 5.1",
+    "lab": [
+      62.68,
+      16.27,
+      24.5
+    ],
+    "hex": "#C18C6D",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FC 6.3",
+    "name": "24Hrs Weightless - FC 6.3",
+    "lab": [
+      59.04,
+      14.58,
+      19.33
+    ],
+    "hex": "#B2846D",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 7.2",
+    "name": "24Hrs Weightless - FW 7.2",
+    "lab": [
+      58.33,
+      13.08,
+      22.26
+    ],
+    "hex": "#AF8366",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 8.1",
+    "name": "24Hrs Weightless - FW 8.1",
+    "lab": [
+      53.93,
+      15.44,
+      27.04
+    ],
+    "hex": "#A87653",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 8.3",
+    "name": "24Hrs Weightless - FW 8.3",
+    "lab": [
+      48.35,
+      19.98,
+      24.75
+    ],
+    "hex": "#9E654A",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FC 7.1",
+    "name": "24Hrs Weightless - FC 7.1",
+    "lab": [
+      46.12,
+      16.66,
+      20.97
+    ],
+    "hex": "#92624B",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FC 3.1",
+    "name": "24Hrs Weightless - FC 3.1",
+    "lab": [
+      90.23,
+      5.3,
+      9.6
+    ],
+    "hex": "#F5DFD1",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Cool"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "24Hrs Weightless Liquid Foundation",
+    "shade": "FW 5.2",
+    "name": "24Hrs Weightless - FW 5.2",
+    "lab": [
+      84.81,
+      5.14,
+      7.98
+    ],
+    "hex": "#E4D0C5",
+    "price": 1499,
+    "date_added": "2026-07-14",
+    "finish": "Airbrush Matte",
+    "coverage": "Medium to Full",
+    "undertone": "Warm"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "Stick Foundation",
+    "shade": "Fresh Ivory",
+    "name": "Stick Foundation - Fresh Ivory",
+    "lab": [
+      84.81,
+      5.14,
+      7.98
+    ],
+    "hex": "#E4D0C5",
+    "price": 639,
+    "date_added": "2026-07-14",
+    "finish": "Natural Creamy",
+    "coverage": "Medium"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "Stick Foundation",
+    "shade": "Au Natural",
+    "name": "Stick Foundation - Au Natural",
+    "lab": [
+      77.49,
+      17.16,
+      21.83
+    ],
+    "hex": "#ECB398",
+    "price": 639,
+    "date_added": "2026-07-14",
+    "finish": "Natural Creamy",
+    "coverage": "Medium"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "BB Cream Foundation",
+    "shade": "Vanilla Creme",
+    "name": "BB Cream - Vanilla Creme",
+    "lab": [
+      69.55,
+      14.38,
+      32.29
+    ],
+    "hex": "#D59F70",
+    "price": 520,
+    "date_added": "2026-07-14",
+    "finish": "Dewy Glow",
+    "coverage": "Light"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "BB Cream Foundation",
+    "shade": "Honey Glaze",
+    "name": "BB Cream - Honey Glaze",
+    "lab": [
+      69.23,
+      11.25,
+      37.08
+    ],
+    "hex": "#D1A066",
+    "price": 520,
+    "date_added": "2026-07-14",
+    "finish": "Dewy Glow",
+    "coverage": "Light"
+  },
+  {
+    "brand": "Colorbar",
+    "product": "BB Cream Foundation",
+    "shade": "White Light",
+    "name": "BB Cream - White Light",
+    "lab": [
+      86.03,
+      4.25,
+      23.55
+    ],
+    "hex": "#F0D3AB",
+    "price": 520,
+    "date_added": "2026-07-14",
+    "finish": "Dewy Glow",
+    "coverage": "Light"
+  }
+];

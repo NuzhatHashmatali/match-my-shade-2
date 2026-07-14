@@ -1,0 +1,6 @@
+{
+  "name": "Find My Foundation",
+  "description": "A premium beauty-tech interface that matches your skin tone with luxury foundation shades from brands like Huda Beauty, Lakme, and Swiss Beauty using live camera scans or selfie uploads.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
