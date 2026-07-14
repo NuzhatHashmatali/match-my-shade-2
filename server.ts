@@ -302,6 +302,7 @@ async function analyzeImageWithGemini(buffer: Buffer, mimeType: string) {
   if (!ai) return null;
 
   const startedAt = Date.now();
+  console.log("[match] AI request started");
   try {
     const base64Data = buffer.toString("base64");
     const responsePromise = ai.models.generateContent({
@@ -327,11 +328,11 @@ async function analyzeImageWithGemini(buffer: Buffer, mimeType: string) {
     const resultText = response.text?.trim() || "{}";
     const parsed = JSON.parse(resultText);
     if (parsed && typeof parsed === "object") {
-      console.log(`[match] AI recommendation completed in ${Date.now() - startedAt}ms`);
+      console.log(`[match] AI request finished in ${Date.now() - startedAt}ms`);
       return parsed;
     }
   } catch (err) {
-    console.warn(`[match] Gemini analysis failed after ${Date.now() - startedAt}ms, using local heuristics.`, err);
+    console.warn(`[match] AI request failed after ${Date.now() - startedAt}ms, using local heuristics.`, err);
   }
 
   return null;
@@ -339,14 +340,16 @@ async function analyzeImageWithGemini(buffer: Buffer, mimeType: string) {
 
 async function analyzeImageBuffer(buffer: Buffer, mimeType: string) {
   const startedAt = Date.now();
-  console.log(`[match] image received`, { mimeType, size: buffer.length });
+  console.log(`[match] Request received`, { mimeType, size: buffer.length });
 
   const geminiResult = await analyzeImageWithGemini(buffer, mimeType);
+  console.log(`[match] Image loaded in ${Date.now() - startedAt}ms`);
   const imageMeta = await withTimeout(sharp(buffer).metadata(), 4000, "image metadata");
   const sourceWidth = imageMeta.width || 0;
   const sourceHeight = imageMeta.height || 0;
-  console.log(`[match] face detection started in ${Date.now() - startedAt}ms`);
+  console.log(`[match] Image loaded`, { sourceWidth, sourceHeight });
 
+  console.log(`[match] Face detection started in ${Date.now() - startedAt}ms`);
   const { data, info } = await withTimeout(
     sharp(buffer)
       .resize(512, 512, { fit: "cover", withoutEnlargement: true })
@@ -360,6 +363,8 @@ async function analyzeImageBuffer(buffer: Buffer, mimeType: string) {
   const pixels = new Uint8ClampedArray(data.buffer);
   const width = info.width;
   const height = info.height;
+  console.log(`[match] Image resized in ${Date.now() - startedAt}ms`, { width, height });
+  console.log(`[match] Face detection finished in ${Date.now() - startedAt}ms`);
   const count = width * height;
 
   const grayscaleValues: number[] = [];
@@ -446,6 +451,7 @@ async function analyzeImageBuffer(buffer: Buffer, mimeType: string) {
     lightingIssue = "poor";
   }
 
+  console.log(`[match] Lighting correction started in ${Date.now() - startedAt}ms`);
   const quality = {
     lighting: lightingIssue,
     blur: blurPoor ? "poor" : "good",
@@ -457,7 +463,7 @@ async function analyzeImageBuffer(buffer: Buffer, mimeType: string) {
   };
 
   const poorQuality = quality.lighting === "poor" || quality.blur === "poor" || quality.exposure === "poor" || quality.noise === "poor" || quality.whiteBalance === "poor";
-  console.log(`[match] lighting correction completed in ${Date.now() - startedAt}ms`, { quality, poorQuality });
+  console.log(`[match] Lighting correction finished in ${Date.now() - startedAt}ms`, { quality, poorQuality });
 
   let targetType = geminiResult?.targetType || (sourceWidth > 0 && sourceHeight > 0 && sourceWidth / sourceHeight > 1.35 ? "swatch" : "face");
   if (geminiResult?.targetType === "swatch" || (sourceWidth > 0 && sourceHeight > 0 && sourceWidth / sourceHeight > 1.4)) {
@@ -558,17 +564,18 @@ async function analyzeImageBuffer(buffer: Buffer, mimeType: string) {
     }
   }
 
+  console.log(`[match] Skin extraction started in ${Date.now() - startedAt}ms`);
   const sampledPixels = targetType === "swatch"
     ? swatchSamples
     : skinRegions.flatMap((region) => sampleSkinPixels(region));
 
   const basePixels = sampledPixels.length > 0 ? sampledPixels : skinSamples;
   const selected = basePixels.length > 0 ? estimateSkinToneFromSamples(basePixels) : [240, 200, 180];
-  console.log(`[match] skin extraction completed in ${Date.now() - startedAt}ms`, { targetType, sampledPixels: basePixels.length });
+  console.log(`[match] Skin extraction finished in ${Date.now() - startedAt}ms`, { targetType, sampledPixels: basePixels.length });
 
   const [r, g, b] = selected;
   const hex = rgbToHex(r, g, b);
-  console.log(`[match] undertone detection completed in ${Date.now() - startedAt}ms`, { hex });
+  console.log(`[match] Undertone detection finished in ${Date.now() - startedAt}ms`, { hex });
   return {
     hex,
     targetType,
@@ -611,7 +618,12 @@ async function startServer() {
       }
 
       const processingPromise = (async () => {
-        const imageAnalysis = await analyzeImageBuffer(req.file.buffer, req.file.mimetype);
+        console.log(`[match] Foundation matching started in ${Date.now() - startedAt}ms`);
+        const file = req.file;
+        if (!file) {
+          return res.status(400).json({ error: "No image file uploaded." });
+        }
+        const imageAnalysis = await analyzeImageBuffer(file.buffer, file.mimetype);
         if (!imageAnalysis?.hex) {
           return res.status(422).json({ error: "We could not read a usable skin tone from this image. Please upload a better image." });
         }
@@ -651,9 +663,10 @@ async function startServer() {
         });
 
         const topMatches = matches.sort((a, b) => b.accuracy - a.accuracy).slice(0, 5);
-        console.log(`[match] foundation matching completed in ${Date.now() - startedAt}ms`, { count: topMatches.length });
+        console.log(`[match] Foundation matching finished in ${Date.now() - startedAt}ms`, { count: topMatches.length });
         const assistant = buildAssistantPayload(imageAnalysis, topMatches, imageAnalysis.hex);
         console.log(`[match] AI recommendation completed in ${Date.now() - startedAt}ms`);
+        console.log(`[match] Preparing response in ${Date.now() - startedAt}ms`);
         res.json({
           matches: topMatches,
           confidence: imageAnalysis.confidence,
@@ -662,12 +675,12 @@ async function startServer() {
           detectedHex: imageAnalysis.hex,
           assistant
         });
-        console.log(`[match] response sent in ${Date.now() - startedAt}ms`);
+        console.log(`[match] Response sent in ${Date.now() - startedAt}ms`);
       })();
 
       await withTimeout(processingPromise, 12000, "match processing");
     } catch (err) {
-      console.error(`[match] matching failed after ${Date.now() - startedAt}ms`, err);
+      console.error(`[match] Matching failed after ${Date.now() - startedAt}ms`, err);
       if (!res.headersSent) {
         res.status(504).json({ error: "The match request timed out. Please try again with a smaller image or a stronger connection." });
       }
